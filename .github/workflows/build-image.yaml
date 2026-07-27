@@ -1,0 +1,25 @@
+name: Build Image
+
+# Pull requests build the image to prove it still compiles, but publish
+# nothing: only tags produce an image users can pull.
+on:
+  pull_request:
+    branches:
+      - "**"
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-docker-image:
+    permissions:
+      contents: read
+      packages: write
+    uses: neteye-platform/repo-commons/.github/workflows/build-docker-image.yaml@740d307f524f37043030b6786c4d6a08897bd615 # main
+    secrets: inherit
+    with:
+      working-directory: .
+      dockerfile-path: ./Dockerfile
+      image-name: ${{ github.event.repository.name }}
+      push: false

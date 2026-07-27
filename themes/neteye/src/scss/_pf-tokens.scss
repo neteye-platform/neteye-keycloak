@@ -1,0 +1,66 @@
+@use "variables" as *;
+
+// PatternFly v5 design tokens.
+//
+// Strategy: lead with semantic global tokens so a single override propagates
+// through every component that derives from them. Component-level patches go
+// in admin.scss (or login.scss) — only for elements that decouple from globals
+// (sidebar, masthead, etc.) or hardcode literals.
+
+// ---------- Brand (mode-invariant: same in light and dark) ----------
+$brand-tokens: (
+  "--pf-v5-global--primary-color--100":   $neteye-primary-color,
+  "--pf-v5-global--primary-color--200":   $neteye-primary-color-hover,
+  "--pf-v5-global--active-color--100":    $neteye-primary-color,
+  "--pf-v5-global--link--Color":          $neteye-primary-color,
+  "--pf-v5-global--link--Color--hover":   $neteye-primary-color-hover,
+  "--pf-v5-global--BorderRadius--sm":     0px,
+);
+
+// ---------- Light mode globals ----------
+$light-tokens: (
+  // Backgrounds
+  "--pf-v5-global--BackgroundColor--100":        $theme-background,
+  "--pf-v5-global--BackgroundColor--200":        $gray-20,
+  "--pf-v5-global--BackgroundColor--light-100":  $gray-10,
+  "--pf-v5-global--BackgroundColor--light-200":  $gray-20,
+  "--pf-v5-global--BackgroundColor--light-300":  $gray-30,
+
+  // Text
+  "--pf-v5-global--Color--100":        $theme-text-color,
+  "--pf-v5-global--Color--200":        $theme-text-color-secondary,
+  "--pf-v5-global--Color--light-100":  $white,
+  "--pf-v5-global--Color--dark-100":   $theme-text-color,
+
+  // Borders / dividers
+  "--pf-v5-global--BorderColor--100":  $gray-20,
+  "--pf-v5-global--BorderColor--200":  $gray-20,
+  "--pf-v5-global--BorderColor--300":  $gray-30,
+);
+
+// ---------- Dark mode globals (same keys, dark values) ----------
+$dark-tokens: (
+  // Backgrounds
+  "--pf-v5-global--BackgroundColor--100":        $theme-dark-background,
+  "--pf-v5-global--BackgroundColor--200":        $theme-dark-surface,
+  "--pf-v5-global--BackgroundColor--light-100":  $theme-dark-background,
+  "--pf-v5-global--BackgroundColor--light-200":  $theme-dark-background,
+  "--pf-v5-global--BackgroundColor--light-300":  $theme-dark-background,
+
+  // Text
+  "--pf-v5-global--Color--100":        $theme-dark-text-color,
+  "--pf-v5-global--Color--200":        $theme-dark-text-color-secondary,
+  "--pf-v5-global--Color--light-100":  $theme-dark-text-color,
+  "--pf-v5-global--Color--dark-100":   $theme-dark-text-color,
+
+  // Borders / dividers
+  "--pf-v5-global--BorderColor--100":  $theme-dark-border,
+  "--pf-v5-global--BorderColor--200":  $theme-dark-border,
+  "--pf-v5-global--BorderColor--300":  $theme-dark-border,
+);
+
+@mixin emit-tokens($tokens) {
+  @each $name, $value in $tokens {
+    #{$name}: $value;
+  }
+}

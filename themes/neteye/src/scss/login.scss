@@ -1,0 +1,949 @@
+@use "variables" as *;
+
+:where(a) {
+  color: $neteye-primary-color;
+  text-decoration: none;
+  transition: color $state-transition;
+
+  &:hover {
+    color: $neteye-primary-color-hover;
+    text-decoration: underline;
+  }
+  &:focus {
+    outline: 1px solid $neteye-primary-color;
+  }
+}
+
+.login-pf {
+  min-height: 100vh;
+  width: 100%;
+  max-width: 100%;
+  padding: 0;
+  background: none;
+  position: fixed;
+  font-family: 'IBM Plex Sans', sans-serif !important;
+
+  body {
+    background: url('../img/neteye-bg.webp') no-repeat center center;
+    background-size: cover;
+  }
+
+  .pf-v5-c-login {
+    padding: 0px;
+    display: block;
+
+    .pf-v5-c-login__header {
+      display: none;
+    }
+
+    .pf-v5-c-login__container {
+      padding: 48px 0px 0px 0px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 100vh;
+      max-width: 556px;
+      background: $white--50;
+      backdrop-filter: blur(3px);
+
+      @media screen and (max-width: 768px) {
+        max-width: none;
+      }
+
+      @media screen and (min-width: 1921px) {
+        width: 25vw;
+        max-width: none;
+        min-width: 556px;
+      }
+
+      .pf-v5-c-login__main {
+        box-shadow: none;
+        border: none;
+        background: none;
+        width: 100%;
+        padding: 48px 64px;
+        max-height: calc(100vh - 48px);
+        overflow-y: auto;
+
+        @media screen and (max-width: 768px) {
+          padding: 48px 32px;
+          max-width: 492px;
+          margin: 0 auto;
+        }
+
+        @media screen and (max-width: 425px) {
+          padding: 48px 16px;
+        }
+
+        @media screen and (min-width: 1921px) {
+          max-width: 556px;
+          margin: 0 auto;
+        }
+
+        .pf-v5-c-login__main-header {
+          padding: 0px;
+
+          h1 {
+            font-size: 32px;
+            font-weight: 400;
+            line-height: 1.2;
+            margin-bottom: 48px;
+          }
+        }
+
+        .pf-v5-c-login__main-body {
+          padding: 0px;
+
+          .pf-v5-c-alert {
+            border-top: 0px;
+            border-right: 0px;
+            border-bottom: 0px;
+            border-left: 3px solid;
+
+            .pf-v5-c-alert__title {
+              font-size: 14px;
+              font-weight: 400;
+              color: $gray-100;
+            }
+
+            &:before {
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              box-sizing: border-box;
+              border-width: 1px 1px 1px 0;
+              border-style: solid;
+              content: "";
+              filter: opacity(0.4);
+              pointer-events: none;
+            }
+
+            &.pf-m-danger {
+              background: $red-10;
+              border-color: $red-60;
+
+              .fa-exclamation-circle {
+                &:before {
+                  content: '';
+                  display: inline-block;
+                  width: 20px;
+                  height: 20px;
+                  margin-left: auto;
+                  background: url('../img/error-red-60.svg') center / contain no-repeat;
+                }
+              }
+
+              &:before {
+                border-color: $red-60;
+              }
+            }
+
+            &.pf-m-info {
+              background: $blue-10;
+              border-color: $blue-60;
+
+              .fa-info-circle {
+                &:before {
+                  content: '';
+                  display: inline-block;
+                  width: 20px;
+                  height: 20px;
+                  margin-left: auto;
+                  background: url('../img/info-blue-60.svg') center / contain no-repeat;
+                }
+              }
+
+              &:before {
+                border-color: $blue-60;
+              }
+            }
+
+            &.pf-m-warning {
+              background: $yellow-10;
+              border-color: $yellow-30;
+
+              .fa-exclamation-triangle {
+                &:before {
+                  content: '';
+                  display: inline-block;
+                  width: 20px;
+                  height: 20px;
+                  margin-left: auto;
+                  background: url('../img/warning-yellow-30.svg') center / contain no-repeat;
+                }
+              }
+
+              &:before {
+                border-color: $yellow-30;
+              }
+            }
+
+            &.pf-m-success {
+              background: $green-10;
+              border-color: $green-60;
+
+              .fa-check-circle {
+                &:before {
+                  content: '';
+                  display: inline-block;
+                  width: 20px;
+                  height: 20px;
+                  margin-left: auto;
+                  background: url('../img/success-green-60.svg') center / contain no-repeat;
+                }
+              }
+
+              &:before {
+                border-color: $green-60;
+              }
+            }
+          }
+
+          .pf-v5-c-input-group__item {
+            margin: 0px;
+          }
+
+          .pf-v5-c-form__group-label {
+            padding-bottom: 8px !important;
+
+            .pf-v5-c-form__label-text {
+              font-size: 12px;
+              font-weight: 400 !important;
+              line-height: 1.2;
+              color: $gray-70;
+            }
+          }
+
+          .pf-v5-c-form__actions {
+            margin-top: 16px;
+          }
+
+          .pf-v5-c-form-control, .pf-m-control {
+            background: transparent;
+
+            &:after, &:before {
+              content: none;
+              display: none;
+            }
+
+            input {
+              font-size: 14px;
+              font-weight: 400;
+              line-height: 1.2;
+              color: $gray-100;
+              height: 48px;
+              background: $white--50;
+              border-bottom: 1px solid $gray-50;
+              outline: 2px solid transparent;
+              outline-offset: -2px;
+              padding: 0px 16px;
+              transition: background-color $state-transition, border-color $state-transition, color $state-transition, outline-color $state-transition;
+
+              &:focus {
+                outline: 2px solid $neteye-primary-color;
+                outline-offset: -2px;
+              }
+            }
+          }
+
+          .pf-v5-c-button {
+            background: $neteye-primary-color;
+            color: $white;
+            height: 48px;
+            padding: 0px 16px;
+            border-radius: 0px;
+            font-size: 14px;
+            font-weight: 400;
+            width: 100%;
+            border-bottom: none !important;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            outline: 1px solid transparent;
+            transition: background-color $state-transition, border-color $state-transition, color $state-transition, outline-color $state-transition;
+
+            &.pf-m-primary, &.pf-m-secondary {
+              outline: 1px solid transparent;
+              outline-offset: -3px;
+
+              &::after {
+                content: '';
+                display: inline-block;
+                width: 16px;
+                height: 100%;
+                margin-right: 16px;
+                margin-left: auto;
+                background: url('../img/arrow--right-white.svg') center / contain no-repeat;
+                border: none !important;
+              }
+
+              &:focus {
+                outline: 1px solid $white;
+                outline-offset: -3px;
+              }
+            }
+
+            &.pf-m-secondary {
+              background: $gray-80;
+              border-bottom: none !important;
+
+              &::after {
+                content: none;
+              }
+
+              &:hover {
+                background: $gray-70;
+              }
+            }
+
+            &.pf-m-control {
+              background: $white--50;
+              margin: 0px;
+              position: relative;
+              outline: 2px solid transparent;
+              outline-offset: -2px;
+              color: $gray-100;
+              line-height: 48px;
+              display: flex;
+              align-items: center;
+              gap: 8px;
+              border-bottom: 1px solid $gray-50 !important;
+
+              &:hover {
+                color: $gray-100;
+                background-color: $gray-20;
+              }
+
+              &:focus {
+                outline: 2px solid $neteye-primary-color;
+                outline-offset: -2px;
+              }
+
+              i {
+                color: $gray-100;
+                height: 100%;
+                width: 16px;
+
+                // Password visibility icon
+                &.fa-eye-slash:before {
+                  content: '';
+                  display: inline-block;
+                  width: 16px;
+                  height: 100%;
+                  margin-right: 16px;
+                  margin-left: auto;
+                  background: url('../img/view--off.svg') center / contain no-repeat;
+                }
+                &.fa-eye:before {
+                  content: '' !important;
+                  display: inline-block;
+                  width: 16px;
+                  height: 100%;
+                  margin-right: 16px;
+                  margin-left: auto;
+                  background: url('../img/view.svg') center / contain no-repeat;
+                }
+
+                // Synch icon
+                &.fa-sync-alt:before {
+                  content: '';
+                  display: inline-block;
+                  width: 16px;
+                  height: 48px;
+                  margin-right: 16px;
+                  margin-left: auto;
+                  background: url('../img/renew.svg') center / contain no-repeat;
+                }
+              }
+            }
+
+            svg {
+              width: 16px;
+              height: 16px;
+              margin-right: 16px;
+              fill: $gray-10;
+            }
+
+            .pf-v5-u-m-auto {
+              margin-left: 0px !important;
+            }
+          }
+
+          .pf-v5-c-button:hover {
+            background: $neteye-primary-color-hover;
+            color: $white;
+            height: 48px;
+            padding: 0px 16px;
+            border-radius: 0px;
+          }
+
+          .pf-v5-c-check {
+            --neteye-checkbox-icon: url('../img/checkbox.svg');
+            --neteye-checkbox-checked-icon: url('../img/checkbox--checked--filled.svg');
+            line-height: 20px;
+
+            .pf-v5-c-check__input {
+              -webkit-appearance: none;
+              appearance: none;
+              flex: 0 0 20px;
+              width: 20px;
+              height: 20px;
+              margin: 0;
+              background: var(--neteye-checkbox-icon) center / 20px 20px no-repeat;
+              border: none;
+              cursor: pointer;
+              transition: background-image $state-transition;
+              border-radius: 4px;
+
+              &:checked {
+                background-image: var(--neteye-checkbox-checked-icon);
+              }
+
+              &:disabled {
+                cursor: not-allowed;
+              }
+
+              &:focus-visible {
+                outline: 2px solid $neteye-primary-color;
+                outline-offset: -1px;
+                border-radius: 4px;
+              }
+            }
+            .pf-v5-c-check__label {
+              font-size: 14px;
+              font-weight: 400;
+              line-height: 1.7;
+            }
+          }
+
+          .pf-v5-c-form__helper-text {
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.7;
+            margin-top: 16px;
+
+            a {
+              color: $neteye-primary-color;
+              text-decoration: none;
+              transition: color $state-transition;
+
+              &:hover {
+                color: $neteye-primary-color-hover;
+                text-decoration: underline;
+              }
+              &:focus {
+                outline: 1px solid $neteye-primary-color;
+              }
+            }
+
+            .pf-m-error {
+              color: $red-60;
+            }
+          }
+
+          .pf-v5-c-form-control__utilities {
+            height: 100%;
+
+            .pf-v5-c-form-control__icon {
+              padding: 0px 0px 0px 0px;
+
+              .fa-exclamation-circle {
+                height: 100%;
+                line-height: 1;
+                padding-top: 14px;
+
+                &:before {
+                  content: '';
+                  display: inline-block;
+                  width: 20px;
+                  height: 20px;
+                  margin-right: 8px;
+                  margin-left: auto;
+                  background: url('../img/error-red-60.svg') center / contain no-repeat;
+                }
+              }
+            }
+          }
+
+          .pf-v5-c-list {
+            font-size: 14px;
+          }
+        }
+
+        // Separator between main and footer
+        .pf-v5-c-login__main-footer-band {
+          padding: 32px 0px;
+          border-top: none;
+
+          .pf-v5-c-login__main-footer-band-item {
+            color: inherit !important;
+            opacity: 0.6;
+
+            #kc-registration-container {
+
+              #kc-registration {
+                font-size: 14px;
+                color: inherit !important;
+
+              }
+            }
+          }
+
+          .pf-v5-u-color-200 {
+            color: inherit !important;
+          }
+        }
+
+        .neteye-login-footer {
+          margin-top: 32px;
+          font-size: 12px;
+          text-align: left;
+          // border-top: 1px solid $gray-50;
+          padding-top: 8px;
+
+          .neteye-header {
+            background: $gray-100;
+            color: $gray-10;
+            padding: 0px 16px;
+            display: flex;
+            height: 48px;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            z-index: 1000;
+            border-bottom: 1px solid $gray-80;
+
+            @media screen and (max-width: 768px) {
+              padding: 0px 0px;
+            }
+
+            .neteye-header-logo {
+              display: block;
+              height: 48px;
+              padding-left: 16px;
+
+              img {
+                height: 48px;
+                padding: 14px 0px;
+                width: auto;
+              }
+            }
+
+            .neteye-header-links {
+              display: flex;
+              gap: 0px;
+
+              a {
+                color: $gray-10;
+                text-decoration: none;
+                transition: opacity 0.2s ease-in-out;
+                height: 48px;
+                padding: 14px 16px;
+                font-size: 14px;
+                display: flex;
+                align-items: center;
+                white-space: nowrap;
+                flex-shrink: 0;
+                gap: 8px;
+                opacity: 0.7;
+                outline: 2px solid transparent;
+                outline-offset: -2px;
+                transition: background-color $state-transition, color $state-transition, opacity $state-transition, outline-color $state-transition;
+
+                &:focus {
+                  outline: 2px solid $white;
+                  outline-offset: -2px;
+                  opacity: 1;
+                }
+
+                @media screen and (max-width: 768px) {
+                  padding: 14px 14px;
+                  span {
+                    display: none;
+                  }
+                }
+              }
+
+              a:hover {
+                background: $gray-90;
+                opacity: 1;
+              }
+            }
+
+
+          }
+
+          a {
+            color: $neteye-primary-color;
+            outline: 1px solid transparent;
+            transition: color $state-transition, outline-color $state-transition;
+
+            &:focus {
+              outline: 1px solid $neteye-primary-color;
+            }
+            &:hover {
+              color: $neteye-primary-color-hover;
+              text-decoration: underline;
+            }
+          }
+        }
+
+        // Select login method list
+        .pf-v5-c-data-list {
+          border: none !important;
+
+          .pf-v5-c-data-list__item {
+            border: none !important;
+            box-shadow: none !important;
+            margin-bottom: 16px;
+            background: $white;
+
+            &:hover {
+              outline: 2px solid $neteye-primary-color;
+              outline-offset: 0px !important;
+            }
+
+            &:focus-visible {
+              outline: 2px solid $neteye-primary-color;
+              outline-offset: 0px !important;
+            }
+
+            .pf-v5-c-data-list__item-row {
+              padding-left: 16px;
+              padding-right: 16px;
+
+              .pf-v5-c-data-list__item-content {
+                padding-bottom: 16px;
+
+                .pf-m-icon {
+                  display: none !important;
+                }
+
+                h2 {
+                  font-size: 14px !important;
+                  line-height: 16px;
+                }
+
+                .select-auth-box-desc {
+                  font-size: 12px;
+                  opacity: 0.6;
+                  padding-top: 16px;
+                  padding-bottom: 0px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Dark theme
+  &.pf-v5-theme-dark {
+    body {
+      background:
+        url('../img/neteye-bg.webp') no-repeat center center;
+      background-size: cover;
+      color: $gray-10 !important;
+    }
+
+    .pf-v5-c-login__container {
+      background: $gray-90--70;
+
+      .pf-v5-c-login__main {
+
+        .pf-v5-c-login__main-body {
+
+          .pf-v5-c-form__label-text {
+            color: $gray-40 !important;
+          }
+
+          .pf-v5-c-form-control, .pf-m-control {
+
+            input {
+              color: $gray-10 !important;
+              background: $gray-100--70 !important;
+              border-bottom: 1px solid $gray-50 !important;
+
+              &:focus {
+                outline: 2px solid $gray-10 !important;
+              }
+            }
+          }
+
+          .pf-v5-c-input-group__item {
+            border-left: none !important;
+
+          }
+
+          .pf-v5-c-button {
+            //border-bottom: 1px solid $gray-60 !important;
+
+            &.pf-m-primary {
+              border-bottom: none !important;
+
+              &:focus {
+                outline: 1px solid $white;
+                outline-offset: -3px;
+              }
+            }
+
+            &.pf-m-secondary {
+              background: $gray-60 !important;
+
+              &:hover {
+                background: $gray-70 !important;
+              }
+            }
+
+            &.pf-m-control {
+              background: $gray-100--70 !important;
+              color: $gray-10;
+              border-bottom: 1px solid $gray-50 !important;
+
+              &:hover {
+                color: $gray-20;
+                background: $gray-90;
+              }
+
+              &:focus {
+                outline: 2px solid $gray-10 !important;
+              }
+
+              i {
+                color: $gray-10;
+
+                // Password visibility icon
+                &.fa-eye-slash:before {
+                  background: url('../img/view--off-white.svg') center / contain no-repeat !important;
+                }
+                &.fa-eye:before {
+                  background: url('../img/view--white.svg') center / contain no-repeat !important;
+                }
+
+                // Synch icon
+                &.fa-sync-alt:before {
+                  background: url('../img/renew--white.svg') center / contain no-repeat !important;
+                }
+              }
+            }
+          }
+
+          .pf-v5-c-alert {
+
+            .pf-v5-c-alert__title {
+              color: $gray-10 !important;
+            }
+
+            &.pf-m-danger {
+              background: $gray-90 !important;
+              border-color: $red-50 !important;
+
+              .fa-exclamation-circle {
+                &:before {
+                  background: url('../img/error-red-50.svg') center / contain no-repeat !important;
+                }
+              }
+
+              &:before {
+                border-color: $red-50 !important;
+              }
+            }
+
+            &.pf-m-info {
+              background: $gray-90 !important;
+              border-color: $blue-50 !important;
+
+              .fa-info-circle {
+                &:before {
+                  background: url('../img/info-blue-50.svg') center / contain no-repeat !important;
+                }
+              }
+
+              &:before {
+                border-color: $blue-50 !important;
+              }
+            }
+
+            &.pf-m-warning {
+              background: $gray-90 !important;
+              border-color: $yellow-30 !important;
+
+              .fa-exclamation-triangle {
+                &:before {
+                  background: url('../img/warning-yellow-30.svg') center / contain no-repeat !important;
+                }
+              }
+
+              &:before {
+                border-color: $yellow-30 !important;
+              }
+            }
+
+            &.pf-m-success {
+              background: $gray-90 !important;
+              border-color: $green-50 !important;
+
+              .fa-check-circle {
+                &:before {
+                  background: url('../img/success-green-50.svg') center / contain no-repeat !important;
+                }
+              }
+
+              &:before {
+                border-color: $green-50 !important;
+              }
+            }
+
+          }
+
+          .pf-v5-c-form__helper-text {
+            .pf-m-error {
+              color: $red-50 !important;
+            }
+          }
+
+          .pf-v5-c-form-control__utilities {
+            .pf-v5-c-form-control__icon {
+              .fa-exclamation-circle {
+                &:before {
+                  background: url('../img/error-red-50.svg') center / contain no-repeat !important;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .pf-v5-c-check {
+        --neteye-checkbox-icon: url('../img/checkbox-white.svg') !important;
+        --neteye-checkbox-checked-icon: url('../img/checkbox--checked--filled-white.svg') !important;
+
+        .pf-v5-c-check__input {
+          &:focus-visible {
+            outline: 2px solid $gray-10 !important;
+          }
+        }
+      }
+
+      .neteye-login-footer {
+        // border-top: 1px solid $gray-60 !important;
+      }
+
+      .pf-v5-c-data-list {
+        .pf-v5-c-data-list__item {
+          background: $gray-100 !important;
+        }
+      }
+
+    }
+  }
+}
+
+// Select authenticator styles
+.nt-select-auth-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  .nt-select-auth-item {
+
+    .nt-select-auth-item-button {
+      background: $white--50;
+      padding: 16px;
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 16px;
+      color: $gray-100;
+      cursor: pointer;
+      transition: background-color $state-transition;
+      position: relative;
+
+      &:hover {
+        outline: 2px solid $neteye-primary-color;
+        outline-offset: -2px;
+      }
+
+      &:focus {
+        outline: 2px solid $neteye-primary-color;
+        outline-offset: -2px;
+      }
+
+      .nt-select-auth-item-icon {
+        display: contents;
+      }
+
+      .nt-select-auth-item-content {
+        flex: auto;
+
+        .nt-select-auth-item-heading {
+          font-size: 16px;
+          font-weight: 400;
+          line-height: 1.2;
+          margin-bottom: 24px;
+        }
+
+        .nt-select-auth-item-description {
+          font-size: 12px;
+          font-weight: 400;
+          line-height: 1.4;
+          opacity: 0.6;
+        }
+      }
+
+      .nt-select-auth-item-arrow {
+        display: contents;
+      }
+
+      &::after {
+        content: '';
+        width: 3px;
+        height: 100%;
+        background: $neteye-primary-color;
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+      }
+
+    }
+  }
+}
+
+.pf-v5-theme-dark {
+  .nt-select-auth-container {
+
+    .nt-select-auth-item {
+
+      .nt-select-auth-item-button {
+        background: $gray-100--70;
+        color: $gray-10;
+      }
+    }
+  }
+}
+
+.nt-light-theme {
+  display: block;
+}
+
+.nt-dark-theme {
+  display: none;
+}
+
+.pf-v5-theme-dark {
+  .nt-dark-theme {
+    display: block;
+  }
+
+  .nt-light-theme {
+    display: none;
+  }
+}

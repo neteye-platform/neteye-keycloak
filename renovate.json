@@ -1,4 +1,53 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["github>neteye-platform/repo-commons"]
+  "extends": ["github>neteye-platform/repo-commons"],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/^Dockerfile$/"],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)(?: extractVersion=(?<extractVersion>\\S+))?(?: versioning=(?<versioning>\\S+))?\\s+ARG \\w+=(?<currentValue>\\S+)",
+        "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)(?: versioning=(?<versioning>\\S+))?\\s+RUN apk add --no-cache \\S+=(?<currentValue>\\S+)"
+      ],
+      "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/^README\\.md$/"],
+      "matchStrings": [
+        "\\| `?[\\w-]+`? \\| (?<currentValue>\\d+\\.\\d+\\.\\d+) \\| \\[[^\\]]+\\]\\(https://github\\.com/(?<depName>[^)]+)\\)"
+      ],
+      "datasourceTemplate": "github-releases",
+      "extractVersionTemplate": "^v(?<version>.*)$",
+      "versioningTemplate": "semver"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/^README\\.md$/"],
+      "matchStrings": [
+        "\\| Keycloak \\| (?<currentValue>\\d+\\.\\d+\\.\\d+) \\| `(?<depName>quay\\.io/keycloak/keycloak)`"
+      ],
+      "datasourceTemplate": "docker",
+      "versioningTemplate": "docker"
+    }
+  ],
+  "packageRules": [
+    {
+      "matchPackageNames": ["*"],
+      "minimumReleaseAge": "7 days"
+    },
+    {
+      "matchFileNames": ["README.md"],
+      "pinDigests": false,
+      "minimumReleaseAge": "7 days"
+    },
+    {
+      "matchPackageNames": [
+        "quay.io/keycloak/keycloak",
+        "sventorben/keycloak-home-idp-discovery"
+      ],
+      "groupName": "keycloak",
+      "minimumReleaseAge": "7 days"
+    }
+  ]
 }

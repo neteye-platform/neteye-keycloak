@@ -4,6 +4,8 @@ repos:
     hooks:
       - id: trailing-whitespace
       - id: check-added-large-files
+        # The login background is a branded asset shipped as-is with the theme.
+        exclude: ^themes/neteye/login/resources/img/neteye-bg\.webp$
       - id: check-case-conflict
       - id: end-of-file-fixer
       - id: fix-byte-order-marker
