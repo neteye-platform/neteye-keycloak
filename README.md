@@ -46,6 +46,9 @@ runs `start --optimized`, so changing a build-time option at runtime fails
 loudly instead of silently re-augmenting the server on every start. Such a
 change needs a new image.
 
+The full set of server options is documented upstream:
+<https://www.keycloak.org/server/configuration>.
+
 ## Local development
 
 ```sh
