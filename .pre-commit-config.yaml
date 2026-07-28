@@ -39,7 +39,7 @@ repos:
       - id: gitleaks
 
   - repo: https://github.com/codespell-project/codespell
-    rev: 2ccb47ff45ad361a21071a7eedda4c37e6ae8c5a # frozen: v2.4.2
+    rev: 57b21406f092110c18776e39b0bda50d37c945c8 # frozen: v2.4.3
     hooks:
       - id: codespell
 
@@ -54,7 +54,7 @@ repos:
       - id: shellcheck
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: 01a675ea018f2fb714478a5ffb83fcea8374bb06 # frozen: v0.15.21
+    rev: 2700fd5671c633760d912769c041bfcde2b9a01b # frozen: v0.15.22
     hooks:
       - id: ruff-check
         args:
@@ -62,7 +62,7 @@ repos:
       - id: ruff-format
 
   - repo: https://github.com/astral-sh/uv-pre-commit
-    rev: d9fca3320346514799461a80b0753eb45d707d46 # frozen: 0.11.28
+    rev: 36bed8143874b34d77931e1236de048cf551e940 # frozen: 0.11.30
     hooks:
       - id: uv-lock
 
@@ -77,12 +77,12 @@ repos:
       - id: hadolint-docker
 
   - repo: https://github.com/DavidAnson/markdownlint-cli2
-    rev: 534166213006ec869b773b7ed8c6ebeaad1165d0 # frozen: v0.23.0
+    rev: 06f92c99e930c11230426b5edd775021d25e08a8 # frozen: v0.23.1
     hooks:
       - id: markdownlint-cli2
 
   - repo: https://github.com/renovatebot/pre-commit-hooks
-    rev: 2e491b456df703bb32b909cc934781ff2a0c23de # frozen: 43.263.1
+    rev: 31e9e2bf05b9a0dcd9dd4910121c2eadf6b857a5 # frozen: 43.273.0
     hooks:
       - id: renovate-config-validator
         args: [--strict]

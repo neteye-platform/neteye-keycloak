@@ -18,12 +18,12 @@ ARG OIDC_MAPPER_VERSION=1.2.0
 # --- Providers: download the release jars ------------------------------------
 # The Keycloak image is UBI-minimal and ships no curl, so fetching happens in a
 # separate stage.
-FROM docker.io/library/alpine:3.21@sha256:48b0309ca019d89d40f670aa1bc06e426dc0931948452e8491e3d65087abc07d AS providers
+FROM docker.io/library/alpine:3.24@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b AS providers
 ARG BCRYPT_VERSION
 ARG HOME_IDP_VERSION
 ARG OIDC_MAPPER_VERSION
-# renovate: datasource=repology depName=alpine_3_21/curl versioning=loose
-RUN apk add --no-cache curl=8.14.1-r2
+# renovate: datasource=repology depName=alpine_3_24/curl versioning=loose
+RUN apk add --no-cache curl=8.21.0-r0
 WORKDIR /providers
 RUN curl -fsSL -O \
         https://github.com/leroyguillaume/keycloak-bcrypt/releases/download/v${BCRYPT_VERSION}/keycloak-bcrypt-${BCRYPT_VERSION}.jar && \
