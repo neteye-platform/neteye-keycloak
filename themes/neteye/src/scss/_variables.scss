@@ -1,0 +1,30 @@
+@forward "colors";
+@forward "typography";
+
+@use "colors" as *;
+
+// ---------- Brand ----------
+$neteye-primary-color: #0A9D81;
+$neteye-primary-color-hover: #088069;
+
+// ---------- Light mode surfaces ----------
+// Note: masthead + left sidebar are intentionally left to PatternFly defaults
+// (dark in both modes), so there are no sidebar-specific tokens here.
+$theme-background: $gray-10;
+$theme-surface: $white;
+$theme-border: $gray-20;
+$theme-text-color: $gray-100;
+$theme-text-color-secondary: $gray-70;
+$theme-heading-color: $gray-90;
+
+// ---------- Dark mode surfaces ----------
+$theme-dark-background: $gray-100;
+$theme-dark-surface: $gray-90;
+$theme-dark-border: $gray-80;
+$theme-dark-text-color: $gray-10;
+$theme-dark-text-color-secondary: $gray-30;
+
+// ---------- Misc shared ----------
+$state-transition: 160ms ease;
+$theme-primary-hover-color: #374151;
+$theme-card-shadow: 0 24px 80px rgba(15, 23, 42, 0.14);

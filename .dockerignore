@@ -1,0 +1,13 @@
+.git
+.github
+compose.yaml
+README.md
+SECURITY.md
+LICENSE-*
+renovate.json
+.pre-commit-config.yaml
+.editorconfig
+
+# The theme's SCSS sources are compiled into the committed CSS; they are not
+# needed at runtime.
+themes/*/src

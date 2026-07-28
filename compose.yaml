@@ -1,0 +1,38 @@
+# Local development only. The credentials below are throwaway and the settings
+# are illustrative: in production every runtime option is supplied by the
+# deployment, not by this file.
+#
+#   podman compose up --build
+#   -> http://localhost:8080/auth  (admin / admin)
+
+services:
+  mariadb:
+    image: docker.io/library/mariadb:11@sha256:efb4959ef2c835cd735dbc388eb9ad6aab0c78dd64febcd51bc17481111890c4
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: keycloak
+      MARIADB_USER: keycloak
+      MARIADB_PASSWORD: keycloak
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  keycloak:
+    build:
+      context: .
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    environment:
+      KC_DB_URL_HOST: mariadb
+      KC_DB_URL_DATABASE: keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: keycloak
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      KC_HOSTNAME_STRICT: "false"
+      KC_HTTP_ENABLED: "true"
+    ports:
+      - "8080:8080"

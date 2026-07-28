@@ -1,0 +1,70 @@
+name: Release Image
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build-docker-image:
+    permissions:
+      contents: read
+      packages: write
+    uses: neteye-platform/repo-commons/.github/workflows/build-docker-image.yaml@740d307f524f37043030b6786c4d6a08897bd615 # main
+    secrets: inherit
+    with:
+      working-directory: .
+      dockerfile-path: ./Dockerfile
+      image-name: ${{ github.event.repository.name }}
+      push: true
+
+  release-image:
+    name: Release Image
+    runs-on: ubuntu-latest
+    needs: build-docker-image
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Generate GitHub App token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        id: generate-token
+        with:
+          app-id: ${{ vars.NETEYE_APP_ID }}
+          private-key: ${{ secrets.NETEYE_APP_PRIVATE_KEY }}
+          permission-contents: write
+
+      - name: Read dependency versions
+        id: dependency-versions
+        run: |
+          get_arg() {
+            grep -m1 "^ARG $1=" Dockerfile | cut -d= -f2
+          }
+          {
+            echo "keycloak=$(get_arg KEYCLOAK_VERSION)"
+            echo "bcrypt=$(get_arg BCRYPT_VERSION)"
+            echo "home-idp=$(get_arg HOME_IDP_VERSION)"
+            echo "oidc-mapper=$(get_arg OIDC_MAPPER_VERSION)"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Create or update GitHub release
+        uses: softprops/action-gh-release@718ea10b132b3b2eba29c1007bb80653f286566b # v3.0.1
+        with:
+          token: ${{ steps.generate-token.outputs.token }}
+          name: ${{ github.ref_name }}
+          generate_release_notes: true
+          body: |
+            ## Dependencies
+
+            | Component | Version |
+            | --- | --- |
+            | Keycloak | ${{ steps.dependency-versions.outputs.keycloak }} |
+            | keycloak-bcrypt | ${{ steps.dependency-versions.outputs.bcrypt }} |
+            | keycloak-home-idp-discovery | ${{ steps.dependency-versions.outputs.home-idp }} |
+            | keycloak-oidc-group-mapper | ${{ steps.dependency-versions.outputs.oidc-mapper }} |

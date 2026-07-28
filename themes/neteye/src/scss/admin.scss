@@ -1,0 +1,157 @@
+@use "variables" as *;
+@use "pf-tokens" as *;
+
+// ---------- Tokens: 80% of the theming ----------
+:root {
+  @include emit-tokens($brand-tokens);
+  @include emit-tokens($light-tokens);
+}
+
+.pf-v5-theme-dark {
+  @include emit-tokens($dark-tokens);
+}
+
+// ---------- Patches: components that don't follow the global tokens ----------
+// The masthead (.pf-v5-c-masthead) and the left sidebar (.pf-v5-c-page__sidebar)
+// intentionally stay on PatternFly's defaults: dark in both light and dark mode.
+// Don't override their background here — every control that lives inside them
+// is styled to read on dark, so flipping them light cascades into many other
+// adjustments.
+
+// ---------- Primary button (brand reinforcement) ----------
+.pf-v5-c-button.pf-m-primary {
+  background-color: $neteye-primary-color;
+
+  &:hover,
+  &:focus {
+    background-color: $neteye-primary-color-hover;
+  }
+}
+
+.pf-v5-c-masthead {
+  background-color: $gray-100;
+  border-bottom: 1px solid $gray-80;
+  padding: 0px 16px;
+
+  .pf-v5-c-masthead__toggle {
+    margin-right: 16px;
+    width: 48px;
+    height: 48px;
+
+    #nav-toggle {
+      width: 48px;
+      height: 48px;
+      background-image: url('../img/menu.svg');
+      background-size: 20px;
+      background-position: center;
+      background-repeat: no-repeat;
+      padding: 0px;
+
+      svg {
+        display: none;
+      }
+
+      &:hover {
+        background-color: $gray-80;
+      }
+    }
+  }
+
+  .keycloak__pageheader_brand {
+    height: 24px;
+  }
+
+  .pf-v5-c-masthead__content {
+    height: 48px;
+    min-height: 48px;
+
+    // Link to Admin Console
+    .pf-v5-c-toolbar {
+      padding: 0px;
+
+      .pf-v5-c-button {
+        font-size: 14px;
+
+        &.pf-m-link {
+          color: $gray-10;
+          height: 48px;
+          line-height: 16px;
+          display: flex;
+          align-items: center;
+
+          .pf-v5-c-button__icon {
+            width: 16px;
+            height: 16px;
+            background-image: url('../img/launch--white.svg');
+            background-size: 16px;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: inline-block;
+            margin-top: 16px;
+            margin-bottom: 16px;
+
+            svg {
+              display: none;
+            }
+
+            &.pf-m-end {
+              margin-left: 16px;
+            }
+
+            &:after {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+
+    // Dropdown element in header
+    .pf-v5-c-menu-toggle {
+      height: 48px;
+      padding-right: 8px;
+      padding-left: 16px;
+      font-size: 14px;
+      line-height: 24px;
+      min-height: 40px;
+
+      .pf-v5-c-menu-toggle__toggle-icon {
+        width: 16px;
+        height: 16px;
+        background-image: url('../img/chevron--down--white.svg');
+        background-size: 16px;
+        background-position: center;
+        background-repeat: no-repeat;
+
+        svg {
+          display: none;
+        }
+      }
+
+      &:hover {
+        color: $gray-10;
+        background-color: $gray-80;
+      }
+
+      &:focus-visible {
+        color: $gray-10;
+        background-color: inherit;
+        outline: 2px solid $gray-10;
+        outline-offset: -2px;
+      }
+
+      &:before, &:after {
+        display: none !important;
+      }
+    }
+
+    .pf-v5-c-avatar {
+      width: 28px;
+      height: 28px;
+    }
+  }
+}
+
+.pf-v5-c-page__sidebar {
+  background-color: $gray-100;
+}

@@ -1,0 +1,171 @@
+// Carbon pure color tokens from @carbon/colors:
+// https://cdn.jsdelivr.net/npm/@carbon/colors@11.51.0/index.scss
+$black: #000000;
+$white: #ffffff;
+
+$white-hover: #e8e8e8 !default;
+$black-hover: #212121 !default;
+
+$gray-10: #f4f4f4;
+$gray-20: #e0e0e0;
+$gray-30: #c6c6c6;
+$gray-40: #a8a8a8;
+$gray-50: #8d8d8d;
+$gray-60: #6f6f6f;
+$gray-70: #525252;
+$gray-80: #393939;
+$gray-90: #262626;
+$gray-100: #161616;
+
+$gray-10-hover: #e8e8e8 !default;
+$gray-20-hover: #d1d1d1 !default;
+$gray-30-hover: #b5b5b5 !default;
+$gray-40-hover: #999999 !default;
+$gray-50-hover: #7a7a7a !default;
+$gray-60-hover: #5e5e5e !default;
+$gray-70-hover: #636363 !default;
+$gray-80-hover: #474747 !default;
+$gray-90-hover: #333333 !default;
+$gray-100-hover: #292929 !default;
+
+$white--50: #ffffff80;
+$gray-10--50: #f4f4f480;
+$gray-90--50: #26262680;
+$gray-90--70: #262626B3;
+$gray-100--70: #161616B3;
+$gray-100--50: #16161680;
+$black--50: #00000080;
+
+// Additional colors
+
+$red-10: #fff1f1 !default;
+$red-20: #ffd7d9 !default;
+$red-30: #ffb3b8 !default;
+$red-40: #ff8389 !default;
+$red-50: #fa4d56 !default;
+$red-60: #da1e28 !default;
+$red-70: #a2191f !default;
+$red-80: #750e13 !default;
+$red-90: #520408 !default;
+$red-100: #2d0709 !default;
+
+$blue-10: #edf5ff !default;
+$blue-20: #d0e2ff !default;
+$blue-30: #a6c8ff !default;
+$blue-40: #78a9ff !default;
+$blue-50: #4589ff !default;
+$blue-60: #0f62fe !default;
+$blue-70: #0043ce !default;
+$blue-80: #002d9c !default;
+$blue-90: #001d6c !default;
+$blue-100: #001141 !default;
+
+$cool-gray-10: #f2f4f8 !default;
+$cool-gray-20: #dde1e6 !default;
+$cool-gray-30: #c1c7cd !default;
+$cool-gray-40: #a2a9b0 !default;
+$cool-gray-50: #878d96 !default;
+$cool-gray-60: #697077 !default;
+$cool-gray-70: #4d5358 !default;
+$cool-gray-80: #343a3f !default;
+$cool-gray-90: #21272a !default;
+$cool-gray-100: #121619 !default;
+
+$cyan-10: #e5f6ff !default;
+$cyan-20: #bae6ff !default;
+$cyan-30: #82cfff !default;
+$cyan-40: #33b1ff !default;
+$cyan-50: #1192e8 !default;
+$cyan-60: #0072c3 !default;
+$cyan-70: #00539a !default;
+$cyan-80: #003a6d !default;
+$cyan-90: #012749 !default;
+$cyan-100: #061727 !default;
+
+$green-10: #defbe6 !default;
+$green-20: #a7f0ba !default;
+$green-30: #6fdc8c !default;
+$green-40: #42be65 !default;
+$green-50: #24a148 !default;
+$green-60: #198038 !default;
+$green-70: #0e6027 !default;
+$green-80: #044317 !default;
+$green-90: #022d0d !default;
+$green-100: #071908 !default;
+
+$magenta-10: #fff0f7 !default;
+$magenta-20: #ffd6e8 !default;
+$magenta-30: #ffafd2 !default;
+$magenta-40: #ff7eb6 !default;
+$magenta-50: #ee5396 !default;
+$magenta-60: #d02670 !default;
+$magenta-70: #9f1853 !default;
+$magenta-80: #740937 !default;
+$magenta-90: #510224 !default;
+$magenta-100: #2a0a18 !default;
+
+$orange-10: #fff2e8 !default;
+$orange-20: #ffd9be !default;
+$orange-30: #ffb784 !default;
+$orange-40: #ff832b !default;
+$orange-50: #eb6200 !default;
+$orange-60: #ba4e00 !default;
+$orange-70: #8a3800 !default;
+$orange-80: #5e2900 !default;
+$orange-90: #3e1a00 !default;
+$orange-100: #231000 !default;
+
+$purple-10: #f6f2ff !default;
+$purple-20: #e8daff !default;
+$purple-30: #d4bbff !default;
+$purple-40: #be95ff !default;
+$purple-50: #a56eff !default;
+$purple-60: #8a3ffc !default;
+$purple-70: #6929c4 !default;
+$purple-80: #491d8b !default;
+$purple-90: #31135e !default;
+$purple-100: #1c0f30 !default;
+
+$red-10: #fff1f1 !default;
+$red-20: #ffd7d9 !default;
+$red-30: #ffb3b8 !default;
+$red-40: #ff8389 !default;
+$red-50: #fa4d56 !default;
+$red-60: #da1e28 !default;
+$red-70: #a2191f !default;
+$red-80: #750e13 !default;
+$red-90: #520408 !default;
+$red-100: #2d0709 !default;
+
+$teal-10: #d9fbfb !default;
+$teal-20: #9ef0f0 !default;
+$teal-30: #3ddbd9 !default;
+$teal-40: #08bdba !default;
+$teal-50: #009d9a !default;
+$teal-60: #007d79 !default;
+$teal-70: #005d5d !default;
+$teal-80: #004144 !default;
+$teal-90: #022b30 !default;
+$teal-100: #081a1c !default;
+
+$warm-gray-10: #f7f3f2 !default;
+$warm-gray-20: #e5e0df !default;
+$warm-gray-30: #cac5c4 !default;
+$warm-gray-40: #ada8a8 !default;
+$warm-gray-50: #8f8b8b !default;
+$warm-gray-60: #726e6e !default;
+$warm-gray-70: #565151 !default;
+$warm-gray-80: #3c3838 !default;
+$warm-gray-90: #272525 !default;
+$warm-gray-100: #171414 !default;
+
+$yellow-10: #fcf4d6 !default;
+$yellow-20: #fddc69 !default;
+$yellow-30: #f1c21b !default;
+$yellow-40: #d2a106 !default;
+$yellow-50: #b28600 !default;
+$yellow-60: #8e6a00 !default;
+$yellow-70: #684e00 !default;
+$yellow-80: #483700 !default;
+$yellow-90: #302400 !default;
+$yellow-100: #1c1500 !default;
