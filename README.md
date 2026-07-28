@@ -40,6 +40,20 @@ compiled in, which endpoints exist and under which path the server is served:
 | `--metrics-enabled` | `true` |
 | `--http-relative-path` | `/auth` |
 
+### Database
+
+The published image is built for MariaDB only: `kc.sh build --db=mariadb`
+compiles in the MariaDB JDBC driver and no other, matching the database NetEye
+ships (`db=mariadb` in `conf/keycloak.conf` of the `keycloak` RPM). Pointing the
+image at PostgreSQL or another engine by setting `KC_DB` at runtime does not
+work and fails at start-up.
+
+`KC_DB` is a build argument, so another engine means another image:
+
+```sh
+podman build --build-arg KC_DB=postgres -t neteye-keycloak:postgres .
+```
+
 Everything else is runtime configuration and is supplied by the deployment:
 database host and credentials, hostname, certificates, proxy headers. The image
 runs `start --optimized`, so changing a build-time option at runtime fails
@@ -47,7 +61,7 @@ loudly instead of silently re-augmenting the server on every start. Such a
 change needs a new image.
 
 The full set of server options is documented upstream:
-<https://www.keycloak.org/server/configuration>.
+<https://www.keycloak.org/server/all-config>.
 
 ## Local development
 
