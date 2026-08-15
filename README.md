@@ -14,7 +14,7 @@ ghcr.io/neteye-platform/neteye-keycloak
 | Keycloak | 26.6.2 | `quay.io/keycloak/keycloak` |
 | `keycloak-bcrypt` | 1.7.0 | [leroyguillaume/keycloak-bcrypt](https://github.com/leroyguillaume/keycloak-bcrypt) |
 | `keycloak-home-idp-discovery` | 26.2.2 | [sventorben/keycloak-home-idp-discovery](https://github.com/sventorben/keycloak-home-idp-discovery) |
-| `keycloak-oidc-groups-mapper` | 1.2.0 | [neteye-platform/keycloak-oidc-groups-mapper](https://github.com/neteye-platform/keycloak-oidc-groups-mapper) |
+| `keycloak-oidc-groups-mapper` | 1.2.1 | [neteye-platform/keycloak-oidc-groups-mapper](https://github.com/neteye-platform/keycloak-oidc-groups-mapper) |
 | NetEye theme | — | `themes/neteye/` in this repository |
 
 The image tag carries the image's own SemVer, not the Keycloak version, so the
