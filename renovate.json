@@ -37,16 +37,12 @@
       "minimumReleaseAge": "7 days"
     },
     {
-      "matchFileNames": ["README.md"],
-      "pinDigests": false,
-      "minimumReleaseAge": "7 days"
+      "matchDatasources": ["docker"],
+      "minimumReleaseAgeBehaviour": "timestamp-optional"
     },
     {
-      "matchPackageNames": [
-        "quay.io/keycloak/keycloak",
-        "sventorben/keycloak-home-idp-discovery"
-      ],
-      "groupName": "keycloak",
+      "matchFileNames": ["README.md"],
+      "pinDigests": false,
       "minimumReleaseAge": "7 days"
     }
   ]
