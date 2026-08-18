@@ -4,16 +4,15 @@
   "customManagers": [
     {
       "customType": "regex",
-      "managerFilePatterns": ["/^Dockerfile$/"],
+      "managerFilePatterns": ["Dockerfile"],
       "matchStrings": [
-        "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)(?: extractVersion=(?<extractVersion>\\S+))?(?: versioning=(?<versioning>\\S+))?\\s+ARG \\w+=(?<currentValue>\\S+)",
-        "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)(?: versioning=(?<versioning>\\S+))?\\s+RUN apk add --no-cache \\S+=(?<currentValue>\\S+)"
+        "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)(?: extractVersion=(?<extractVersion>\\S+))?(?: versioning=(?<versioning>\\S+))?\\s+ARG \\w+=(?<currentValue>\\S+)"
       ],
       "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
     },
     {
       "customType": "regex",
-      "managerFilePatterns": ["/^README\\.md$/"],
+      "managerFilePatterns": ["README.md"],
       "matchStrings": [
         "\\| `?[\\w-]+`? \\| (?<currentValue>\\d+\\.\\d+\\.\\d+) \\| \\[[^\\]]+\\]\\(https://github\\.com/(?<depName>[^)]+)\\)"
       ],
@@ -23,7 +22,7 @@
     },
     {
       "customType": "regex",
-      "managerFilePatterns": ["/^README\\.md$/"],
+      "managerFilePatterns": ["README.md"],
       "matchStrings": [
         "\\| Keycloak \\| (?<currentValue>\\d+\\.\\d+\\.\\d+) \\| `(?<depName>quay\\.io/keycloak/keycloak)`"
       ],

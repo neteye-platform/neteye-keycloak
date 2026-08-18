@@ -22,8 +22,8 @@ FROM docker.io/library/alpine:3.24@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae
 ARG BCRYPT_VERSION
 ARG HOME_IDP_VERSION
 ARG OIDC_MAPPER_VERSION
-# renovate: datasource=repology depName=alpine_3_24/curl versioning=loose
-RUN apk add --no-cache curl=8.21.0-r0
+# hadolint ignore=DL3018
+RUN apk add --no-cache curl
 WORKDIR /providers
 RUN curl -fsSL -O \
         https://github.com/leroyguillaume/keycloak-bcrypt/releases/download/v${BCRYPT_VERSION}/keycloak-bcrypt-${BCRYPT_VERSION}.jar && \
