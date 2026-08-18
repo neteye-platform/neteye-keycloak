@@ -33,8 +33,10 @@ RUN curl -fsSL -O \
     curl -fsSL -O \
         https://github.com/neteye-platform/keycloak-oidc-groups-mapper/releases/download/v${OIDC_MAPPER_VERSION}/keycloak-oidc-group-mapper-${OIDC_MAPPER_VERSION}.jar
 
+FROM quay.io/keycloak/keycloak:${KEYCLOAK_VERSION}@sha256:f9ba7b2af90db8dc749a57ca9aedca51e840cb9224441ab546a968da941da900 AS keycloak
+
 # --- Build -------------------------------------------------------------------
-FROM quay.io/keycloak/keycloak:${KEYCLOAK_VERSION}@sha256:f9ba7b2af90db8dc749a57ca9aedca51e840cb9224441ab546a968da941da900 AS build
+FROM keycloak AS build
 
 # Build-time options. Changing any of these requires rebuilding the image:
 # they determine which JDBC driver is compiled in, which endpoints exist and
@@ -53,7 +55,7 @@ RUN /opt/keycloak/bin/kc.sh build \
         --http-relative-path="${KC_HTTP_RELATIVE_PATH}"
 
 # --- Final -------------------------------------------------------------------
-FROM quay.io/keycloak/keycloak:${KEYCLOAK_VERSION}@sha256:f9ba7b2af90db8dc749a57ca9aedca51e840cb9224441ab546a968da941da900
+FROM keycloak
 
 ARG KEYCLOAK_VERSION
 ARG BCRYPT_VERSION
