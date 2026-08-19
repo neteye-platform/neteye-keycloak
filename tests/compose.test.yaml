@@ -1,0 +1,36 @@
+# Theme test harness.
+#
+# Runs a stock Keycloak with the NetEye theme mounted on top, importing the
+# test realm from tests/realm-test.json. This exercises the theme as Keycloak
+# renders it -- against the exact
+# Keycloak version the image is built on. `start-dev` reloads the theme on
+# every request (no rebuild needed) and auto-creates the admin/admin bootstrap
+# account.
+#
+#   docker compose -f tests/compose.test.yaml up -d
+#   ... run Playwright against http://localhost:8080  (mailpit API on :8025)
+
+services:
+  mailpit:
+    image: docker.io/axllent/mailpit:v1.26.0@sha256:dffd15d30117bb67e9f4464f6595fc9a40a6b324f99b43236c4d1675b708752e
+    ports:
+      - "8025:8025"
+
+  keycloak-test:
+    image: quay.io/keycloak/keycloak:26.6.2@sha256:f9ba7b2af90db8dc749a57ca9aedca51e840cb9224441ab546a968da941da900
+    depends_on:
+      - mailpit
+    command:
+      - start-dev
+      - --import-realm
+      - --spi-theme-static-max-age=-1
+      - --spi-theme-cache-themes=false
+      - --spi-theme-cache-templates=false
+    volumes:
+      - ./realm-test.json:/opt/keycloak/data/import/realm-test.json:ro
+      - ../themes/neteye:/opt/keycloak/themes/neteye:ro
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+    ports:
+      - "8080:8080"

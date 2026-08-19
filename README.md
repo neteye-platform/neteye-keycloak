@@ -21,7 +21,7 @@ The image tag carries the image's own SemVer, not the Keycloak version, so the
 versions above are also recorded as labels:
 
 ```sh
-podman inspect --format '{{json .Labels}}' ghcr.io/neteye-platform/neteye-keycloak:1.0.0
+docker inspect --format '{{json .Labels}}' ghcr.io/neteye-platform/neteye-keycloak:1.0.0
 ```
 
 All three providers are consumed as release jars. There is no way to add a jar
@@ -51,7 +51,7 @@ work and fails at start-up.
 `KC_DB` is a build argument, so another engine means another image:
 
 ```sh
-podman build --build-arg KC_DB=postgres -t neteye-keycloak:postgres .
+docker build --build-arg KC_DB=postgres -t neteye-keycloak:postgres .
 ```
 
 Everything else is runtime configuration and is supplied by the deployment:
@@ -66,12 +66,32 @@ The full set of server options is documented upstream:
 ## Local development
 
 ```sh
-podman compose up --build
+docker compose -f compose.dev.yaml up --build
 ```
 
 Keycloak comes up on <http://localhost:8080/auth> with `admin` / `admin`,
-backed by a throwaway MariaDB. The credentials and settings in `compose.yaml`
+backed by a throwaway MariaDB. The credentials and settings in `compose.dev.yaml`
 are illustrative only.
+
+## Testing
+
+The theme is tested the way the deployment sees it: it is mounted onto a
+stock Keycloak — the exact version the image's `Dockerfile` builds on — and
+exercised through Keycloak's real HTTP flows with Playwright, including real
+email rendering captured by a Mailpit SMTP sink. See
+[`tests/README.md`](tests/README.md) for how to run them locally and what
+they cover.
+
+Both suites run on every pull request
+([`.github/workflows/tests.yaml`](.github/workflows/tests.yaml)).
+
+The three providers NetEye ships are tested the other way around: the built
+image itself (Keycloak plus the providers, baked with `kc.sh build` for
+MariaDB) is started against the same MariaDB it ships with and exercised with
+Playwright — a real brokered login drives `keycloak-home-idp-discovery` and
+`keycloak-oidc-groups-mapper`, and a local login proves passwords are hashed
+with `keycloak-bcrypt`. See the plugin section in
+[`tests/README.md`](tests/README.md).
 
 ## Releasing
 

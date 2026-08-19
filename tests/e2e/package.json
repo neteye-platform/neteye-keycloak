@@ -1,0 +1,8 @@
+{
+  "name": "neteye-keycloak-tests",
+  "private": true,
+  "description": "E2E tests for the NetEye Keycloak image (theme and providers).",
+  "devDependencies": {
+    "@playwright/test": "1.62.1"
+  }
+}

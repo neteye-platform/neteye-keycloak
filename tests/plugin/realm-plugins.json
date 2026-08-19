@@ -1,0 +1,129 @@
+{
+  "realm": "plugin-test",
+  "enabled": true,
+  "registrationAllowed": false,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "resetPasswordAllowed": false,
+  "editUsernameAllowed": false,
+  "bruteForceProtected": true,
+  "sslRequired": "external",
+  "passwordPolicy": "hashAlgorithm(bcrypt)",
+  "clients": [
+    {
+      "clientId": "plugin-test-client",
+      "enabled": true,
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": true,
+      "redirectUris": ["http://localhost:8081/auth/realms/plugin-test/account/*"]
+    }
+  ],
+  "users": [
+    {
+      "username": "testadmin",
+      "enabled": true,
+      "email": "testadmin@neteye.example",
+      "firstName": "Test",
+      "lastName": "Admin",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "testpass"
+        }
+      ],
+      "realmRoles": ["admin"]
+    }
+  ],
+  "roles": {
+    "realm": [
+      {
+        "name": "admin"
+      }
+    ]
+  },
+  "browserFlow": "hidp-browser",
+  "authenticationFlows": [
+    {
+      "alias": "hidp-browser",
+      "description": "Browser flow with home-idp-discovery",
+      "providerId": "basic-flow",
+      "topLevel": true,
+      "builtIn": false,
+      "authenticationExecutions": [
+        {
+          "authenticator": "auth-cookie",
+          "requirement": "ALTERNATIVE",
+          "priority": 10
+        },
+        {
+          "authenticator": "home-idp-discovery",
+          "requirement": "ALTERNATIVE",
+          "priority": 20
+        },
+        {
+          "requirement": "ALTERNATIVE",
+          "priority": 30,
+          "flowAlias": "hidp-fallback",
+          "authenticatorFlow": true
+        }
+      ]
+    },
+    {
+      "alias": "hidp-fallback",
+      "description": "Username/password fallback when no home IdP matches",
+      "providerId": "basic-flow",
+      "topLevel": false,
+      "builtIn": false,
+      "authenticationExecutions": [
+        {
+          "authenticator": "auth-username-password-form",
+          "requirement": "REQUIRED",
+          "priority": 10
+        }
+      ]
+    }
+  ],
+  "authenticatorConfig": [],
+  "identityProviders": [
+    {
+      "alias": "upstream-idp",
+      "providerId": "oidc",
+      "enabled": true,
+      "trustEmail": true,
+      "config": {
+        "authorizationUrl": "http://localhost:8081/auth/realms/upstream/protocol/openid-connect/auth",
+        "tokenUrl": "http://localhost:8081/auth/realms/upstream/protocol/openid-connect/token",
+        "userInfoUrl": "http://localhost:8081/auth/realms/upstream/protocol/openid-connect/userinfo",
+        "jwksUrl": "http://localhost:8081/auth/realms/upstream/protocol/openid-connect/certs",
+        "issuer": "http://localhost:8081/auth/realms/upstream",
+        "clientId": "upstream-client",
+        "clientSecret": "upstream-secret",
+        "defaultScope": "openid",
+        "syncMode": "IMPORT",
+        "useJwksUrl": "true",
+        "home.idp.discovery.domains": "neteye.example"
+      }
+    }
+  ],
+  "identityProviderMappers": [
+    {
+      "name": "upstream-username",
+      "identityProviderAlias": "upstream-idp",
+      "identityProviderMapper": "oidc-username-idp-mapper",
+      "config": {
+        "syncMode": "IMPORT",
+        "template": "${CLAIM.preferred_username}"
+      }
+    },
+    {
+      "name": "upstream-groups",
+      "identityProviderAlias": "upstream-idp",
+      "identityProviderMapper": "oidc-groups-mapper",
+      "config": {
+        "syncMode": "IMPORT",
+        "group_claim": "groups"
+      }
+    }
+  ]
+}

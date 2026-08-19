@@ -1,0 +1,48 @@
+{
+  "realm": "neteye-test",
+  "displayName": "NetEye Theme Test",
+  "enabled": true,
+  "loginTheme": "neteye",
+  "accountTheme": "neteye",
+  "adminTheme": "neteye",
+  "emailTheme": "neteye",
+  "registrationAllowed": false,
+  "resetPasswordAllowed": true,
+  "verifyEmail": false,
+  "smtpServer": {
+    "host": "mailpit",
+    "port": "1025",
+    "from": "noreply@neteye.example",
+    "fromDisplayName": "NetEye"
+  },
+  "clients": [
+    {
+      "clientId": "neteye-test",
+      "name": "NetEye Test Client",
+      "enabled": true,
+      "publicClient": true,
+      "protocol": "openid-connect",
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": true,
+      "redirectUris": ["http://localhost:8080/realms/neteye-test/account/*", "http://localhost:8080/*"],
+      "webOrigins": ["+"]
+    }
+  ],
+  "users": [
+    {
+      "username": "testuser",
+      "email": "testuser@neteye.example",
+      "emailVerified": true,
+      "enabled": true,
+      "firstName": "Test",
+      "lastName": "User",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "testpass",
+          "temporary": false
+        }
+      ]
+    }
+  ]
+}
