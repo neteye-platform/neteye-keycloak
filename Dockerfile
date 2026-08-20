@@ -5,7 +5,7 @@
 # credentials, hostname, certificates, proxy settings -- is supplied by the
 # deployment, never baked into the image.
 
-ARG KEYCLOAK_VERSION=26.6.2
+ARG KEYCLOAK_VERSION=26.7.2
 
 # Provider versions.
 # renovate: datasource=github-releases depName=leroyguillaume/keycloak-bcrypt extractVersion=^v(?<version>.*)$
@@ -33,7 +33,7 @@ RUN curl -fsSL -O \
     curl -fsSL -O \
         https://github.com/neteye-platform/keycloak-oidc-groups-mapper/releases/download/v${OIDC_MAPPER_VERSION}/keycloak-oidc-group-mapper-${OIDC_MAPPER_VERSION}.jar
 
-FROM quay.io/keycloak/keycloak:${KEYCLOAK_VERSION}@sha256:f9ba7b2af90db8dc749a57ca9aedca51e840cb9224441ab546a968da941da900 AS keycloak
+FROM quay.io/keycloak/keycloak:${KEYCLOAK_VERSION}@sha256:6efbadc00f0ed0237610becf11f4101b9c3ad8edf08a5b70c97aa4154ed436ec AS keycloak
 
 # --- Build -------------------------------------------------------------------
 FROM keycloak AS build
