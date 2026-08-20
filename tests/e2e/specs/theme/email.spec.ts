@@ -1,6 +1,6 @@
 import { test, expect, type APIRequestContext } from "@playwright/test";
 
-const BASE = process.env.KC_BASE_URL ?? "http://localhost:8080";
+const BASE = process.env.KC_BASE_URL ?? "http://localhost:8080/auth";
 const MAILPIT = process.env.MAILPIT_URL ?? "http://localhost:8025";
 const REALM = process.env.KC_TEST_REALM ?? "neteye-test";
 

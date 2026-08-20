@@ -24,7 +24,7 @@
       "protocol": "openid-connect",
       "standardFlowEnabled": true,
       "directAccessGrantsEnabled": true,
-      "redirectUris": ["http://localhost:8080/realms/neteye-test/account/*", "http://localhost:8080/*"],
+      "redirectUris": ["http://localhost:8080/auth/realms/neteye-test/account/*", "http://localhost:8080/auth/*"],
       "webOrigins": ["+"]
     }
   ],

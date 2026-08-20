@@ -1,10 +1,10 @@
 import { defineConfig } from "@playwright/test";
 
-// The Keycloak under test is started externally (tests/compose.test.yaml).
-// We only point Playwright at it. The stock image serves under "/" (the "/auth"
-// relative path is a build-time option of the produced image); override with
-// KC_BASE_URL to test a different deployment, e.g. http://host:8080/auth.
-const baseURL = process.env.KC_BASE_URL ?? "http://localhost:8080";
+// The Keycloak under test is the IMAGE THIS REPOSITORY BUILDS
+// (localhost/neteye-keycloak:test started by tests/compose.test.yaml), which
+// serves under "/auth" and imports the neteye-test realm. Override with
+// KC_BASE_URL to test a different deployment.
+const baseURL = process.env.KC_BASE_URL ?? "http://localhost:8080/auth";
 
 export default defineConfig({
     testDir: "./specs/theme",

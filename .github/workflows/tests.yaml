@@ -9,8 +9,25 @@ permissions:
   contents: read
 
 jobs:
+  build-image:
+    # The image this repo builds (Keycloak + the NetEye theme + the three
+    # providers) is built ONCE here and shared by the two test jobs below, so a
+    # PR never builds it more than once. push: false uploads it as an artifact
+    # (neteye-keycloak-image/image.tar) instead of publishing to GHCR.
+    permissions:
+      contents: read
+      packages: write
+    uses: neteye-platform/repo-commons/.github/workflows/build-docker-image.yaml@c35f666c3658d9878fa18deb6c858751b04ecf90 # main
+    secrets: inherit
+    with:
+      working-directory: .
+      dockerfile-path: ./Dockerfile
+      image-name: ${{ github.event.repository.name }}
+      push: false
+
   theme-tests:
     name: Run theme tests
+    needs: build-image
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -23,6 +40,17 @@ jobs:
           cache: npm
           cache-dependency-path: tests/e2e/package-lock.json
 
+      - name: Download built image
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: ${{ github.event.repository.name }}-image
+          path: ${{ runner.temp }}/
+
+      - name: Load built image
+        run: |
+          docker load -i ${{ runner.temp }}/image.tar
+          docker tag "$(docker images -q | head -1)" localhost/neteye-keycloak:test
+
       - name: Start Keycloak + Mailpit harness
         run: docker compose -f compose.test.yaml up -d
         working-directory: tests
@@ -30,7 +58,7 @@ jobs:
       - name: Wait for Keycloak to accept requests
         run: |
           for i in $(seq 1 60); do
-            if curl -sf http://localhost:8080/realms/neteye-test >/dev/null 2>&1; then
+            if curl -sf http://localhost:8080/auth/realms/neteye-test >/dev/null 2>&1; then
               echo "Keycloak ready after ~$((i * 2))s"
               exit 0
             fi
@@ -71,10 +99,11 @@ jobs:
         working-directory: tests
 
   plugin-tests:
-    # The image this repo builds (Keycloak + the three providers) against the
-    # MariaDB it ships with: does it boot --optimized, and do the providers work?
-    # Needs a real DB, so it is gated to its own job.
+    # The built image against the MariaDB it ships with: does it boot
+    # --optimized, and do the providers work? Needs a real DB, so it is gated
+    # to its own job.
     name: Run plugin tests
+    needs: build-image
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -87,8 +116,16 @@ jobs:
           cache: npm
           cache-dependency-path: tests/e2e/package-lock.json
 
-      - name: Build the image
-        run: docker build -t localhost/neteye-keycloak:test .
+      - name: Download built image
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: ${{ github.event.repository.name }}-image
+          path: ${{ runner.temp }}/
+
+      - name: Load built image
+        run: |
+          docker load -i ${{ runner.temp }}/image.tar
+          docker tag "$(docker images -q | head -1)" localhost/neteye-keycloak:test
 
       - name: Start the plugin harness
         run: docker compose -f compose.plugin.yaml up -d

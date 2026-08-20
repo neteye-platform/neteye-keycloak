@@ -1,22 +1,20 @@
 import { test, expect, type Page, type APIResponse } from "@playwright/test";
 
+// The theme runs in the built image, served under "/auth" (KC_HTTP_RELATIVE_PATH).
+const BASE = process.env.KC_BASE_URL ?? "http://localhost:8080/auth";
 const REALM = process.env.KC_TEST_REALM ?? "neteye-test";
+const ACCOUNT = `${BASE}/realms/${REALM}/account/`;
 
 // Login request for the public test client. A valid redirect_uri lets the auth
 // server render the real login page instead of an error page.
 function loginUrl() {
-    const u = new URL(
-        `/realms/${REALM}/protocol/openid-connect/auth`,
-        "http://x",
+    return (
+        `${BASE}/realms/${REALM}/protocol/openid-connect/auth` +
+        `?client_id=neteye-test` +
+        `&response_type=code` +
+        `&scope=openid` +
+        `&redirect_uri=${encodeURIComponent(ACCOUNT)}`
     );
-    u.searchParams.set("client_id", "neteye-test");
-    u.searchParams.set("response_type", "code");
-    u.searchParams.set("scope", "openid");
-    u.searchParams.set(
-        "redirect_uri",
-        "http://localhost:8080/realms/neteye-test/account/",
-    );
-    return u.pathname + u.search;
 }
 
 // Fail the test if the page surfaced any browser/console/network error that
@@ -100,7 +98,7 @@ test("theme static resources are served", async ({ page }) => {
 });
 
 test("account console loads with the theme active", async ({ page }) => {
-    const res = await page.goto(`/realms/${REALM}/account/`, {
+    const res = await page.goto(ACCOUNT, {
         waitUntil: "domcontentloaded",
     });
     expect(res?.status(), "account console must not 500").toBe(200);

@@ -1,22 +1,30 @@
 # Tests
 
 Two Playwright suites cover this image, both run on every pull request
-(`.github/workflows/tests.yaml`): the **theme** and the **plugins**.
+(`.github/workflows/tests.yaml`): the **theme** and the **plugins**. Both run
+the image this repository actually builds — `localhost/neteye-keycloak:test`,
+i.e. Keycloak plus the NetEye theme and the three providers, baked with
+`kc.sh build` for MariaDB — against the MariaDB it ships with.
 
-The theme is tested the way the deployment sees it: mounted onto a stock
-Keycloak -- the exact version the image's `Dockerfile` builds on -- and
-exercised through Keycloak's real HTTP flows with Playwright. Email
-templates are rendered for real too, captured by a Mailpit SMTP sink.
+The theme is tested the way it ships: baked into the image, exercised through
+Keycloak's real HTTP flows with Playwright. Email templates are rendered for
+real too, captured by a Mailpit SMTP sink. The plugin suite additionally
+drives the three providers (bcrypt, home IdP discovery, OIDC groups mapper).
+
+The image is built once per pull request and reused by both suites, so a PR
+never builds it more than once.
 
 ## Layout
 
 | File | Purpose |
 | --- | --- |
-| `compose.test.yaml` | Keycloak + Mailpit harness for the tests |
-| `realm-test.json` | test realm imported into the standalone Keycloak |
-| `e2e/` | Playwright suite (`playwright.theme.config.ts`) |
+| `compose.test.yaml` | theme harness: MariaDB + Mailpit + built image |
+| `realm-test.json` | theme realm `neteye-test`, imported at startup |
+| `plugin/compose.plugin.yaml` | plugin harness: MariaDB + built image |
+| `e2e/` | Playwright suites and configs |
 | `e2e/specs/theme/theme.spec.ts` | login, account console, resources |
 | `e2e/specs/theme/email.spec.ts` | email layout coverage via Mailpit |
+| `e2e/specs/plugins/plugins.spec.ts` | bcrypt, home-idp, groups mapper |
 
 ## Prerequisites
 
@@ -24,32 +32,37 @@ templates are rendered for real too, captured by a Mailpit SMTP sink.
   native compose support;
 - Node.js 22 to run Playwright.
 
-No image needs building: the harness runs the upstream Keycloak image directly.
+The image must be built once before either suite can run:
+`docker build -t localhost/neteye-keycloak:test .` from the repo root.
 
-## Running locally
+## Running the theme suite locally
 
 ```sh
-# 1. start the harness (Keycloak on :8080, Mailpit API on :8025)
+# 1. build the image (from repo root)
+docker build -t localhost/neteye-keycloak:test .
+
+# 2. start the harness (Keycloak on :8080/auth, Mailpit API on :8025)
 docker compose -f tests/compose.test.yaml up -d
 
-# 2. wait until the test realm is served
-until curl -sf http://localhost:8080/realms/neteye-test; do sleep 2; done
+# 3. wait until the test realm is served
+until curl -sf http://localhost:8080/auth/realms/neteye-test; do sleep 2; done
 
-# 3. install the Playwright deps (once) and the browser
+# 4. install the Playwright deps (once) and the browser
 cd tests/e2e
 npm ci
 npx playwright install --with-deps chromium
 
-# 4. run the suite
+# 5. run the suite
 npx playwright test -c playwright.theme.config.ts
 
-# 5. tear down
+# 6. tear down
 cd .. && docker compose -f tests/compose.test.yaml down -v
 ```
 
-Keycloak listens on `http://localhost:8080` (the stock image serves at root; the
-`/auth` path is a build-time option of the produced image only). The bootstrap
-`admin` / `admin` account is created automatically in dev mode.
+The built image serves under `/auth` (a build-time option of the produced
+image), so the realm's registered redirect URIs, the suite's `KC_BASE_URL` and
+the wait loop all use `http://localhost:8080/auth`. The bootstrap `admin` /
+`admin` account is created automatically.
 
 Every spec also fails if the page surfaces a console, page or network error that
 points at the theme, so a template that throws (a 500) or a broken asset
@@ -80,7 +93,7 @@ run fails instead of silently degrading to the default look.
 
 The suite reads these environment variables (defaults in parentheses):
 
-- `KC_BASE_URL` (`http://localhost:8080`) — Keycloak under test;
+- `KC_BASE_URL` (`http://localhost:8080/auth`) — Keycloak under test;
 - `MAILPIT_URL` (`http://localhost:8025`) — Mailpit HTTP API;
 - `KC_TEST_REALM` (`neteye-test`) — realm the specs and helpers use.
 
@@ -88,19 +101,16 @@ The suite reads these environment variables (defaults in parentheses):
 
 Every moving part is pinned and tracked by Renovate:
 
-- Keycloak and Mailpit are fixed by tag **and** manifest digest in
-  `compose.test.yaml`;
+- Keycloak, Mailpit and MariaDB are fixed by tag **and** manifest digest in
+  the compose files;
 - Playwright is pinned in `tests/e2e/package.json` and `package-lock.json`;
 - the GitHub Actions are pinned by commit SHA in `tests.yaml`.
 
-## Plugin harness
+## Plugin suite
 
-The theme tests mount the theme onto a stock Keycloak. The plugins shipped in
-the image can't be tested that way: they do not exist on the stock image. So
-the plugin suite runs the image this repository actually builds —
-`localhost/neteye-keycloak:test`, i.e. Keycloak plus the three providers baked
-with `kc.sh build` for MariaDB — against the same MariaDB it ships with, and
-exercises the providers through Keycloak's real HTTP flows with Playwright.
+The plugin suite runs the same `localhost/neteye-keycloak:test` image but
+exercises the three providers through Keycloak's real HTTP flows against the
+image's MariaDB (`tests/plugin/compose.plugin.yaml`), on `:8081`.
 
 ### Plugin layout
 
@@ -163,8 +173,8 @@ a wrong one is rejected.
 Each test creates or resets its own users at run time through the Admin REST
 API, so the suite is deterministic and independent of the imported realm's
 seed state. The password used for the brokered login is reset via the Admin API
-rather than read from `realm-upstream.json`. The plugin job runs on every pull
-request alongside the theme job in
+rather than read from `realm-upstream.json`. The plugin job runs on every
+pull request alongside the theme job in
 `.github/workflows/tests.yaml`.
 
 ### Plugin reproducibility

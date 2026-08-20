@@ -1,36 +1,53 @@
 # Theme test harness.
 #
-# Runs a stock Keycloak with the NetEye theme mounted on top, importing the
-# test realm from tests/realm-test.json. This exercises the theme as Keycloak
-# renders it -- against the exact
-# Keycloak version the image is built on. `start-dev` reloads the theme on
-# every request (no rebuild needed) and auto-creates the admin/admin bootstrap
-# account.
+# Runs the IMAGE THIS REPOSITORY BUILDS (localhost/neteye-keycloak:test, i.e.
+# Keycloak plus the NetEye theme baked in, plus the three providers) against
+# the same MariaDB it ships with, importing the theme test realm from
+# tests/realm-test.json. The theme is exercised the way it ships: baked into
+# the image, not mounted.
 #
+#   docker build -t localhost/neteye-keycloak:test .   # from repo root
 #   docker compose -f tests/compose.test.yaml up -d
-#   ... run Playwright against http://localhost:8080  (mailpit API on :8025)
+#   ... run Playwright against http://localhost:8080/auth (mailpit API on :8025)
 
 services:
+  mariadb:
+    image: docker.io/library/mariadb:12.3.2@sha256:c237fd50cc48d6f2b87c4ca66d52f3b5eef7271b3bea7aee586c0be19d5b460d
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: keycloak
+      MARIADB_USER: keycloak
+      MARIADB_PASSWORD: keycloak
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
   mailpit:
     image: docker.io/axllent/mailpit:v1.26.0@sha256:dffd15d30117bb67e9f4464f6595fc9a40a6b324f99b43236c4d1675b708752e
     ports:
       - "8025:8025"
 
   keycloak-test:
-    image: quay.io/keycloak/keycloak:26.6.2@sha256:f9ba7b2af90db8dc749a57ca9aedca51e840cb9224441ab546a968da941da900
+    image: localhost/neteye-keycloak:test
     depends_on:
-      - mailpit
+      mariadb:
+        condition: service_healthy
     command:
-      - start-dev
+      - start
+      - --optimized
       - --import-realm
-      - --spi-theme-static-max-age=-1
-      - --spi-theme-cache-themes=false
-      - --spi-theme-cache-templates=false
     volumes:
       - ./realm-test.json:/opt/keycloak/data/import/realm-test.json:ro
-      - ../themes/neteye:/opt/keycloak/themes/neteye:ro
     environment:
+      KC_DB_URL_HOST: mariadb
+      KC_DB_URL_DATABASE: keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: keycloak
       KC_BOOTSTRAP_ADMIN_USERNAME: admin
       KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      KC_HOSTNAME_STRICT: "false"
+      KC_HTTP_ENABLED: "true"
     ports:
       - "8080:8080"
