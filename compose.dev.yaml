@@ -2,7 +2,7 @@
 # are illustrative: in production every runtime option is supplied by the
 # deployment, not by this file.
 #
-#   podman compose up --build
+#   docker compose -f compose.dev.yaml up --build
 #   -> http://localhost:8080/auth  (admin / admin)
 
 services:

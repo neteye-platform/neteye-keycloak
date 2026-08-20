@@ -21,7 +21,7 @@ The image tag carries the image's own SemVer, not the Keycloak version, so the
 versions above are also recorded as labels:
 
 ```sh
-podman inspect --format '{{json .Labels}}' ghcr.io/neteye-platform/neteye-keycloak:1.0.0
+docker inspect --format '{{json .Labels}}' ghcr.io/neteye-platform/neteye-keycloak:1.0.0
 ```
 
 All three providers are consumed as release jars. There is no way to add a jar
@@ -51,7 +51,7 @@ work and fails at start-up.
 `KC_DB` is a build argument, so another engine means another image:
 
 ```sh
-podman build --build-arg KC_DB=postgres -t neteye-keycloak:postgres .
+docker build --build-arg KC_DB=postgres -t neteye-keycloak:postgres .
 ```
 
 Everything else is runtime configuration and is supplied by the deployment:
@@ -66,12 +66,28 @@ The full set of server options is documented upstream:
 ## Local development
 
 ```sh
-podman compose up --build
+docker compose -f compose.dev.yaml up --build
 ```
 
 Keycloak comes up on <http://localhost:8080/auth> with `admin` / `admin`,
-backed by a throwaway MariaDB. The credentials and settings in `compose.yaml`
+backed by a throwaway MariaDB. The credentials and settings in `compose.dev.yaml`
 are illustrative only.
+
+## Testing
+
+Both suites (theme and plugins) run the built image itself — Keycloak plus the
+NetEye theme and the three providers, baked with `kc.sh build` for MariaDB —
+started against the same MariaDB it ships with and exercised through Keycloak's
+real HTTP flows with Playwright. The theme is tested the way it ships: baked
+into the image, including real email rendering captured by a Mailpit SMTP sink.
+The plugin suite drives a real brokered login through `keycloak-home-idp-discovery`
+and `keycloak-oidc-groups-mapper`, and a local login proves passwords are
+hashed with `keycloak-bcrypt`.
+
+The image is built once per pull request and shared by both suites
+([`.github/workflows/tests.yaml`](.github/workflows/tests.yaml)). See
+[`tests/README.md`](tests/README.md) for how to run them locally and what
+they cover.
 
 ## Releasing
 
