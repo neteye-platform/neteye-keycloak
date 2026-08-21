@@ -33,7 +33,7 @@ RUN curl -fsSL -O \
     curl -fsSL -O \
         https://github.com/neteye-platform/keycloak-oidc-groups-mapper/releases/download/v${OIDC_MAPPER_VERSION}/keycloak-oidc-group-mapper-${OIDC_MAPPER_VERSION}.jar
 
-FROM quay.io/keycloak/keycloak:${KEYCLOAK_VERSION}@sha256:6efbadc00f0ed0237610becf11f4101b9c3ad8edf08a5b70c97aa4154ed436ec AS keycloak
+FROM quay.io/keycloak/keycloak:${KEYCLOAK_VERSION}@sha256:831330513f55695572286e521f94fcd3c7e285250ed5b848090265a33192f669 AS keycloak
 
 # --- Build -------------------------------------------------------------------
 FROM keycloak AS build
