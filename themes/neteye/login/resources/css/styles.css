@@ -112,8 +112,13 @@ textarea {
   font-family: "IBM Plex Sans", sans-serif !important;
 }
 .login-pf body {
-  background: url("../img/neteye-bg.webp") no-repeat center center;
+  background: url("../img/neteye-bg-1920.webp") no-repeat center center;
   background-size: cover;
+}
+@media screen and (min-width: 1921px) {
+  .login-pf body {
+    background-image: url("../img/neteye-bg-2736.webp");
+  }
 }
 .login-pf .pf-v5-c-login {
   padding: 0px;
@@ -642,9 +647,14 @@ textarea {
   padding-bottom: 0px;
 }
 .login-pf.pf-v5-theme-dark body {
-  background: url("../img/neteye-bg.webp") no-repeat center center;
+  background: url("../img/neteye-bg-1920.webp") no-repeat center center;
   background-size: cover;
   color: #f4f4f4 !important;
+}
+@media screen and (min-width: 1921px) {
+  .login-pf.pf-v5-theme-dark body {
+    background-image: url("../img/neteye-bg-2736.webp");
+  }
 }
 .login-pf.pf-v5-theme-dark .pf-v5-c-login__container {
   background: rgba(38, 38, 38, 0.7019607843);
