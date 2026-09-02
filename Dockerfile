@@ -13,7 +13,7 @@ ARG BCRYPT_VERSION=1.7.0
 # renovate: datasource=github-releases depName=sventorben/keycloak-home-idp-discovery extractVersion=^v(?<version>.*)$
 ARG HOME_IDP_VERSION=26.2.2
 # renovate: datasource=github-releases depName=neteye-platform/keycloak-oidc-groups-mapper extractVersion=^v(?<version>.*)$
-ARG OIDC_MAPPER_VERSION=1.2.1
+ARG OIDC_MAPPER_VERSION=1.2.2
 
 # --- Providers: download the release jars ------------------------------------
 # The Keycloak image is UBI-minimal and ships no curl, so fetching happens in a
