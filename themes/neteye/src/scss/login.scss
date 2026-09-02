@@ -24,8 +24,12 @@
   font-family: 'IBM Plex Sans', sans-serif !important;
 
   body {
-    background: url('../img/neteye-bg.webp') no-repeat center center;
+    background: url('../img/neteye-bg-1920.webp') no-repeat center center;
     background-size: cover;
+
+    @media screen and (min-width: 1921px) {
+      background-image: url('../img/neteye-bg-2736.webp');
+    }
   }
 
   .pf-v5-c-login {
@@ -648,9 +652,13 @@
   &.pf-v5-theme-dark {
     body {
       background:
-        url('../img/neteye-bg.webp') no-repeat center center;
+        url('../img/neteye-bg-1920.webp') no-repeat center center;
       background-size: cover;
       color: $gray-10 !important;
+
+      @media screen and (min-width: 1921px) {
+        background-image: url('../img/neteye-bg-2736.webp');
+      }
     }
 
     .pf-v5-c-login__container {
