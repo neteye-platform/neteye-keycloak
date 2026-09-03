@@ -5,7 +5,7 @@
 # credentials, hostname, certificates, proxy settings -- is supplied by the
 # deployment, never baked into the image.
 
-ARG KEYCLOAK_VERSION=26.7.2
+ARG KEYCLOAK_VERSION=26.7.3
 
 # Provider versions.
 # renovate: datasource=github-releases depName=leroyguillaume/keycloak-bcrypt extractVersion=^v(?<version>.*)$
@@ -13,7 +13,7 @@ ARG BCRYPT_VERSION=1.7.0
 # renovate: datasource=github-releases depName=sventorben/keycloak-home-idp-discovery extractVersion=^v(?<version>.*)$
 ARG HOME_IDP_VERSION=26.2.2
 # renovate: datasource=github-releases depName=neteye-platform/keycloak-oidc-groups-mapper extractVersion=^v(?<version>.*)$
-ARG OIDC_MAPPER_VERSION=1.2.2
+ARG OIDC_MAPPER_VERSION=1.3.1
 
 # --- Providers: download the release jars ------------------------------------
 # The Keycloak image is UBI-minimal and ships no curl, so fetching happens in a
@@ -26,14 +26,14 @@ ARG OIDC_MAPPER_VERSION
 RUN apk add --no-cache curl
 WORKDIR /providers
 RUN curl -fsSL -O \
-        https://github.com/leroyguillaume/keycloak-bcrypt/releases/download/v${BCRYPT_VERSION}/keycloak-bcrypt-${BCRYPT_VERSION}.jar && \
+    https://github.com/leroyguillaume/keycloak-bcrypt/releases/download/v${BCRYPT_VERSION}/keycloak-bcrypt-${BCRYPT_VERSION}.jar && \
     curl -fsSL -O \
-        https://github.com/sventorben/keycloak-home-idp-discovery/releases/download/v${HOME_IDP_VERSION}/keycloak-home-idp-discovery.jar && \
+    https://github.com/sventorben/keycloak-home-idp-discovery/releases/download/v${HOME_IDP_VERSION}/keycloak-home-idp-discovery.jar && \
     # note: the repository is "groups" plural, the artifact "group" singular
     curl -fsSL -O \
-        https://github.com/neteye-platform/keycloak-oidc-groups-mapper/releases/download/v${OIDC_MAPPER_VERSION}/keycloak-oidc-group-mapper-${OIDC_MAPPER_VERSION}.jar
+    https://github.com/neteye-platform/keycloak-oidc-groups-mapper/releases/download/v${OIDC_MAPPER_VERSION}/keycloak-oidc-group-mapper-${OIDC_MAPPER_VERSION}.jar
 
-FROM quay.io/keycloak/keycloak:${KEYCLOAK_VERSION}@sha256:9d1f1b2b7261ff53c66cb1092dfcdc34a5fb77e81f9e6a6e75b8b6a795de8067 AS keycloak
+FROM quay.io/keycloak/keycloak:${KEYCLOAK_VERSION}@sha256:ff4257d0d64efbe99ed1ddfaf07765cc3c36dc7518bf8324d41961327f441c54 AS keycloak
 
 # --- Build -------------------------------------------------------------------
 FROM keycloak AS build
@@ -49,10 +49,10 @@ COPY --chown=keycloak:keycloak --from=providers /providers/ /opt/keycloak/provid
 COPY --chown=keycloak:keycloak themes/neteye/ /opt/keycloak/themes/neteye/
 
 RUN /opt/keycloak/bin/kc.sh build \
-        --db="${KC_DB}" \
-        --health-enabled=true \
-        --metrics-enabled=true \
-        --http-relative-path="${KC_HTTP_RELATIVE_PATH}"
+    --db="${KC_DB}" \
+    --health-enabled=true \
+    --metrics-enabled=true \
+    --http-relative-path="${KC_HTTP_RELATIVE_PATH}"
 
 # --- Final -------------------------------------------------------------------
 FROM keycloak
@@ -68,9 +68,9 @@ COPY --from=build /opt/keycloak/ /opt/keycloak/
 # shared build-docker-image workflow. These record what the tag cannot: the
 # image tag carries the image's own SemVer, not the versions inside it.
 LABEL com.neteye.keycloak.version="${KEYCLOAK_VERSION}" \
-      com.neteye.provider.bcrypt.version="${BCRYPT_VERSION}" \
-      com.neteye.provider.home-idp-discovery.version="${HOME_IDP_VERSION}" \
-      com.neteye.provider.oidc-groups-mapper.version="${OIDC_MAPPER_VERSION}"
+    com.neteye.provider.bcrypt.version="${BCRYPT_VERSION}" \
+    com.neteye.provider.home-idp-discovery.version="${HOME_IDP_VERSION}" \
+    com.neteye.provider.oidc-groups-mapper.version="${OIDC_MAPPER_VERSION}"
 
 USER 1000
 ENTRYPOINT ["/opt/keycloak/bin/kc.sh"]
