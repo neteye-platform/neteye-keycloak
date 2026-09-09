@@ -51,6 +51,7 @@ jobs:
             echo "bcrypt=$(get_arg BCRYPT_VERSION)"
             echo "home-idp=$(get_arg HOME_IDP_VERSION)"
             echo "oidc-mapper=$(get_arg OIDC_MAPPER_VERSION)"
+            echo "login-sync=$(get_arg LOGIN_SYNC_VERSION)"
           } >> "$GITHUB_OUTPUT"
 
       - name: Create or update GitHub release
@@ -68,3 +69,4 @@ jobs:
             | keycloak-bcrypt | ${{ steps.dependency-versions.outputs.bcrypt }} |
             | keycloak-home-idp-discovery | ${{ steps.dependency-versions.outputs.home-idp }} |
             | keycloak-oidc-group-mapper | ${{ steps.dependency-versions.outputs.oidc-mapper }} |
+            | keycloak-login-sync-provider | ${{ steps.dependency-versions.outputs.login-sync }} |

@@ -3,13 +3,14 @@
 Two Playwright suites cover this image, both run on every pull request
 (`.github/workflows/tests.yaml`): the **theme** and the **plugins**. Both run
 the image this repository actually builds — `localhost/neteye-keycloak:test`,
-i.e. Keycloak plus the NetEye theme and the three providers, baked with
+i.e. Keycloak plus the NetEye theme and the four providers, baked with
 `kc.sh build` for MariaDB — against the MariaDB it ships with.
 
 The theme is tested the way it ships: baked into the image, exercised through
 Keycloak's real HTTP flows with Playwright. Email templates are rendered for
 real too, captured by a Mailpit SMTP sink. The plugin suite additionally
-drives the three providers (bcrypt, home IdP discovery, OIDC groups mapper).
+drives the four providers (bcrypt, home IdP discovery, OIDC groups mapper,
+login sync).
 
 The image is built once per pull request and reused by both suites, so a PR
 never builds it more than once.
@@ -25,6 +26,7 @@ never builds it more than once.
 | `e2e/specs/theme/theme.spec.ts` | login, account console, resources |
 | `e2e/specs/theme/email.spec.ts` | email layout coverage via Mailpit |
 | `e2e/specs/plugins/plugins.spec.ts` | bcrypt, home-idp, groups mapper |
+| `e2e/specs/plugins/login-sync.spec.ts` | login-sync delivery, fail-closed |
 
 ## Prerequisites
 
@@ -109,7 +111,7 @@ Every moving part is pinned and tracked by Renovate:
 ## Plugin suite
 
 The plugin suite runs the same `localhost/neteye-keycloak:test` image but
-exercises the three providers through Keycloak's real HTTP flows against the
+exercises the four providers through Keycloak's real HTTP flows against the
 image's MariaDB (`tests/plugin/compose.plugin.yaml`), on `:8081`.
 
 ### Plugin layout
@@ -119,7 +121,9 @@ image's MariaDB (`tests/plugin/compose.plugin.yaml`), on `:8081`.
 | `plugin/compose.plugin.yaml` | MariaDB + the built image harness |
 | `plugin/realm-plugins.json` | SP realm `plugin-test`, brokered IdP |
 | `plugin/realm-upstream.json` | IdP realm `upstream` (broker target) |
+| `plugin/mock-receiver/server.mjs` | host-side login-sync mock receiver |
 | `e2e/specs/plugins/plugins.spec.ts` | bcrypt, home-idp, groups mapper |
+| `e2e/specs/plugins/login-sync.spec.ts` | login-sync delivery, fail-closed |
 | `e2e/playwright.plugin.config.ts` | Playwright config for the plugin suite |
 
 ### Running the plugin suite
@@ -136,7 +140,8 @@ until curl -sf http://localhost:8081/auth/realms/plugin-test; do
   sleep 2
 done
 
-# 4. run the suite (npm deps installed once, as in the theme section)
+# 4. run the suite (npm deps installed once, as in the theme section; the
+#    login-sync mock receiver is started automatically by the webServer)
 cd tests/e2e
 npm ci
 npx playwright install --with-deps chromium
@@ -157,6 +162,15 @@ domain, so discovery leaves it local) and checks both that its stored
 credential is hashed with `bcrypt` and that a correct password signs in while
 a wrong one is rejected.
 
+login-sync is exercised against a host-side zero-dependency mock receiver
+(`plugin/mock-receiver/server.mjs`) that the Playwright `webServer` starts on
+`:9099` before the suite; the container reaches it because
+`compose.plugin.yaml` maps `localhost` to `host-gateway`, so the provider's
+`http://localhost:9099/sync` endpoint lands on the host. The fail-closed
+contract is covered per user: the mock answers `503` only for usernames on
+its fail list, so the blocked login is the test's own user and the parallel
+specs keep signing through a `200`.
+
 ### Plugin coverage
 
 - **bcrypt** (`bcrypt provider hashes passwords with bcrypt`): a password set
@@ -169,6 +183,14 @@ a wrong one is rejected.
 - **OIDC groups mapper** (`oidc groups mapper grants the upstream group
   membership`): after the brokered login, the federated user is a member of the
   IDP-namespaced group mapped from the upstream `groups` claim.
+- **login-sync delivery** (`login synchronization delivers the authenticated
+  user to the receiver`): a browser login reaches the mock as one
+  bearer-authenticated POST whose payload carries `event_type`, `username`
+  and `groups`, and the login proceeds.
+- **login-sync fail-closed** (`login synchronization fails closed when the
+  receiver rejects`): with the mock answering `503` for that user, the
+  login is blocked with the provider's error page; once the user leaves the
+  fail list the same user signs in normally.
 
 Each test creates or resets its own users at run time through the Admin REST
 API, so the suite is deterministic and independent of the imported realm's
