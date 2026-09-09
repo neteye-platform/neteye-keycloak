@@ -12,6 +12,16 @@ export default defineConfig({
     fullyParallel: true,
     retries: 0,
     reporter: [["list"]],
+    // Host-side login-sync mock; compose.plugin.yaml documents how the
+    // container reaches it.
+    webServer: [
+        {
+            command: "node ../plugin/mock-receiver/server.mjs",
+            url: "http://127.0.0.1:9099/healthz",
+            reuseExistingServer: !process.env.CI,
+            timeout: 15_000,
+        },
+    ],
     use: {
         baseURL,
     },

@@ -17,6 +17,36 @@
       "standardFlowEnabled": true,
       "directAccessGrantsEnabled": true,
       "redirectUris": ["http://localhost:8081/auth/realms/plugin-test/account/*"]
+    },
+    {
+      "clientId": "login-sync-sa",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": true,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "login-sync-test-secret",
+      "protocolMappers": [
+        {
+          "name": "permissionsync audience",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "config": {
+            "included.client.audience": "permissionsync",
+            "access.token.claim": "true",
+            "id.token.claim": "false",
+            "introspection.token.claim": "true"
+          }
+        }
+      ]
+    }
+  ],
+  "clientScopes": [
+    {
+      "name": "permissionsync:plugin-test-client",
+      "protocol": "openid-connect"
     }
   ],
   "users": [
@@ -46,9 +76,29 @@
   "authenticationFlows": [
     {
       "alias": "hidp-browser",
-      "description": "Browser flow with home-idp-discovery",
+      "description": "Browser flow: authentication subflow, then login-sync sync",
       "providerId": "basic-flow",
       "topLevel": true,
+      "builtIn": false,
+      "authenticationExecutions": [
+        {
+          "requirement": "REQUIRED",
+          "priority": 10,
+          "flowAlias": "hidp-authentication",
+          "authenticatorFlow": true
+        },
+        {
+          "authenticator": "login-sync",
+          "requirement": "REQUIRED",
+          "priority": 20
+        }
+      ]
+    },
+    {
+      "alias": "hidp-authentication",
+      "description": "Authenticates the user: cookie, home-idp forward, or password fallback",
+      "providerId": "basic-flow",
+      "topLevel": false,
       "builtIn": false,
       "authenticationExecutions": [
         {

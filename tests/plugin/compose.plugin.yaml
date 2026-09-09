@@ -1,7 +1,11 @@
 # Plugin compatibility harness: runs the image this repo builds
-# (localhost/neteye-keycloak:test, i.e. Keycloak + the three NetEye providers)
+# (localhost/neteye-keycloak:test, i.e. Keycloak + the four NetEye providers)
 # against the same MariaDB it ships with. The theme harness
 # (tests/compose.test.yaml) stays separate: it is cheap and covers only the theme.
+#
+# The login-sync receiver is a host-side mock (:9099) started by the
+# Playwright webServer; the `localhost -> host-gateway` mapping below is
+# how the container reaches it.
 #
 #   docker build -t localhost/neteye-keycloak:test .   # from repo root
 #   docker compose -f tests/plugin/compose.plugin.yaml up -d
@@ -48,5 +52,13 @@ services:
       KC_BOOTSTRAP_ADMIN_PASSWORD: admin
       KC_HOSTNAME_STRICT: "false"
       KC_HTTP_ENABLED: "true"
+      # login-sync provider SPI (the double underscore after AUTHENTICATOR
+      # is mandatory: the single-underscore form does not resolve).
+      KC_SPI_AUTHENTICATOR__LOGIN_SYNC__SERVICE_ENDPOINT: "http://localhost:9099/sync"
+      KC_SPI_AUTHENTICATOR__LOGIN_SYNC__SA_CLIENT_ID: "login-sync-sa"
+      KC_SPI_AUTHENTICATOR__LOGIN_SYNC__SA_CLIENT_SECRET: "login-sync-test-secret"
+      KC_SPI_AUTHENTICATOR__LOGIN_SYNC__SA_TOKEN_ENDPOINT: "http://localhost:8081/auth/realms/plugin-test/protocol/openid-connect/token"
+      KC_SPI_AUTHENTICATOR__LOGIN_SYNC__HTTP_TIMEOUT_MS: "5000"
+      KC_SPI_AUTHENTICATOR__LOGIN_SYNC__ALLOW_INSECURE_HTTP: "true"
     ports:
       - "8081:8080"

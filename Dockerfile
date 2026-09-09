@@ -1,5 +1,6 @@
-# NetEye Keycloak image: upstream Keycloak plus the NetEye theme and the three
-# providers NetEye ships (bcrypt, home IdP discovery, OIDC groups mapper).
+# NetEye Keycloak image: upstream Keycloak plus the NetEye theme and the four
+# providers NetEye ships (bcrypt, home IdP discovery, OIDC groups mapper, login
+# synchronization).
 #
 # Only build-time options live here. Runtime configuration -- database host and
 # credentials, hostname, certificates, proxy settings -- is supplied by the
@@ -14,6 +15,8 @@ ARG BCRYPT_VERSION=1.7.0
 ARG HOME_IDP_VERSION=26.2.2
 # renovate: datasource=github-releases depName=neteye-platform/keycloak-oidc-groups-mapper extractVersion=^v(?<version>.*)$
 ARG OIDC_MAPPER_VERSION=1.3.1
+# renovate: datasource=github-releases depName=neteye-platform/keycloak-login-sync-provider extractVersion=^v(?<version>.*)$
+ARG LOGIN_SYNC_VERSION=0.1.0
 
 # --- Providers: download the release jars ------------------------------------
 # The Keycloak image is UBI-minimal and ships no curl, so fetching happens in a
@@ -22,6 +25,7 @@ FROM docker.io/library/alpine:3.24@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae
 ARG BCRYPT_VERSION
 ARG HOME_IDP_VERSION
 ARG OIDC_MAPPER_VERSION
+ARG LOGIN_SYNC_VERSION
 # hadolint ignore=DL3018
 RUN apk add --no-cache curl
 WORKDIR /providers
@@ -31,7 +35,9 @@ RUN curl -fsSL -O \
     https://github.com/sventorben/keycloak-home-idp-discovery/releases/download/v${HOME_IDP_VERSION}/keycloak-home-idp-discovery.jar && \
     # note: the repository is "groups" plural, the artifact "group" singular
     curl -fsSL -O \
-    https://github.com/neteye-platform/keycloak-oidc-groups-mapper/releases/download/v${OIDC_MAPPER_VERSION}/keycloak-oidc-group-mapper-${OIDC_MAPPER_VERSION}.jar
+    https://github.com/neteye-platform/keycloak-oidc-groups-mapper/releases/download/v${OIDC_MAPPER_VERSION}/keycloak-oidc-group-mapper-${OIDC_MAPPER_VERSION}.jar && \
+    curl -fsSL -O \
+    https://github.com/neteye-platform/keycloak-login-sync-provider/releases/download/v${LOGIN_SYNC_VERSION}/keycloak-login-sync-provider-${LOGIN_SYNC_VERSION}.jar
 
 FROM quay.io/keycloak/keycloak:${KEYCLOAK_VERSION}@sha256:ff4257d0d64efbe99ed1ddfaf07765cc3c36dc7518bf8324d41961327f441c54 AS keycloak
 
@@ -61,6 +67,7 @@ ARG KEYCLOAK_VERSION
 ARG BCRYPT_VERSION
 ARG HOME_IDP_VERSION
 ARG OIDC_MAPPER_VERSION
+ARG LOGIN_SYNC_VERSION
 
 COPY --from=build /opt/keycloak/ /opt/keycloak/
 
@@ -70,7 +77,8 @@ COPY --from=build /opt/keycloak/ /opt/keycloak/
 LABEL com.neteye.keycloak.version="${KEYCLOAK_VERSION}" \
     com.neteye.provider.bcrypt.version="${BCRYPT_VERSION}" \
     com.neteye.provider.home-idp-discovery.version="${HOME_IDP_VERSION}" \
-    com.neteye.provider.oidc-groups-mapper.version="${OIDC_MAPPER_VERSION}"
+    com.neteye.provider.oidc-groups-mapper.version="${OIDC_MAPPER_VERSION}" \
+    com.neteye.provider.login-sync.version="${LOGIN_SYNC_VERSION}"
 
 USER 1000
 ENTRYPOINT ["/opt/keycloak/bin/kc.sh"]
