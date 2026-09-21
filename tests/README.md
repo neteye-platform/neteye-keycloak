@@ -165,8 +165,10 @@ a wrong one is rejected.
 login-sync is exercised against a host-side zero-dependency mock receiver
 (`plugin/mock-receiver/server.mjs`) that the Playwright `webServer` starts on
 `:9099` before the suite; the container reaches it because
-`compose.plugin.yaml` maps `localhost` to `host-gateway`, so the provider's
-`http://localhost:9099/sync` endpoint lands on the host. The fail-closed
+`compose.plugin.yaml` maps `host.docker.internal` to `host-gateway`, so the
+provider's `http://host.docker.internal:9099/sync` endpoint lands on the host
+(`localhost` would stay the container loopback on docker, where the provider's
+`java.net.http.HttpClient` resolves it). The fail-closed
 contract is covered per user: the mock answers `503` only for usernames on
 its fail list, so the blocked login is the test's own user and the parallel
 specs keep signing through a `200`.

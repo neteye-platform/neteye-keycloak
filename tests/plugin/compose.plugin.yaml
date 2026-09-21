@@ -4,8 +4,8 @@
 # (tests/compose.test.yaml) stays separate: it is cheap and covers only the theme.
 #
 # The login-sync receiver is a host-side mock (:9099) started by the
-# Playwright webServer; the `localhost -> host-gateway` mapping below is
-# how the container reaches it.
+# Playwright webServer; the `host.docker.internal` extra host below is how
+# the container reaches it.
 #
 #   docker build -t localhost/neteye-keycloak:test .   # from repo root
 #   docker compose -f tests/plugin/compose.plugin.yaml up -d
@@ -36,6 +36,9 @@ services:
       # or Keycloak (KC_HOSTNAME_STRICT=false) derives mismatched issuers.
       # localhost -> host-gateway forwards :8081 back into the container :8080.
       - "localhost:host-gateway"
+      # java.net.http.HttpClient (the provider) resolves localhost to the
+      # container loopback: docker does not override it via extra_hosts.
+      - "host.docker.internal:host-gateway"
     command:
       - start
       - --optimized
@@ -54,10 +57,10 @@ services:
       KC_HTTP_ENABLED: "true"
       # login-sync provider SPI (the double underscore after AUTHENTICATOR
       # is mandatory: the single-underscore form does not resolve).
-      KC_SPI_AUTHENTICATOR__LOGIN_SYNC__SERVICE_ENDPOINT: "http://localhost:9099/sync"
+      KC_SPI_AUTHENTICATOR__LOGIN_SYNC__SERVICE_ENDPOINT: "http://host.docker.internal:9099/sync"
       KC_SPI_AUTHENTICATOR__LOGIN_SYNC__SA_CLIENT_ID: "login-sync-sa"
       KC_SPI_AUTHENTICATOR__LOGIN_SYNC__SA_CLIENT_SECRET: "login-sync-test-secret"
-      KC_SPI_AUTHENTICATOR__LOGIN_SYNC__SA_TOKEN_ENDPOINT: "http://localhost:8081/auth/realms/plugin-test/protocol/openid-connect/token"
+      KC_SPI_AUTHENTICATOR__LOGIN_SYNC__SA_TOKEN_ENDPOINT: "http://host.docker.internal:8081/auth/realms/plugin-test/protocol/openid-connect/token"
       KC_SPI_AUTHENTICATOR__LOGIN_SYNC__HTTP_TIMEOUT_MS: "5000"
       KC_SPI_AUTHENTICATOR__LOGIN_SYNC__ALLOW_INSECURE_HTTP: "true"
     ports:
