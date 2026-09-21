@@ -28,6 +28,7 @@
       "serviceAccountsEnabled": true,
       "clientAuthenticatorType": "client-secret",
       "secret": "login-sync-test-secret",
+      "optionalClientScopes": ["permissionsync:plugin-test-client"],
       "protocolMappers": [
         {
           "name": "permissionsync audience",

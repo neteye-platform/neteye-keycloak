@@ -42,7 +42,7 @@ async function deleteUser(
 ): Promise<void> {
     const existing = (await (
         await request.get(
-            `${BASE}/admin/realms/${realm}/users?username=${username}`,
+            `${BASE}/admin/realms/${realm}/users?username=${encodeURIComponent(username)}&exact=true`,
             {
                 headers: auth(token),
             },
@@ -82,7 +82,7 @@ async function createUser(
 
     const list = (await (
         await request.get(
-            `${BASE}/admin/realms/${REALM}/users?username=${username}`,
+            `${BASE}/admin/realms/${REALM}/users?username=${encodeURIComponent(username)}&exact=true`,
             {
                 headers: auth(token),
             },
@@ -106,6 +106,8 @@ type SyncRecord = {
     receivedAt: string;
     username: unknown;
     authorizationPresent: boolean;
+    scope: string;
+    aud: string[];
     payload: {
         event_type?: string;
         username?: string;
@@ -156,10 +158,10 @@ test("login synchronization delivers the authenticated user to the receiver", as
                     (entry) => entry.payload?.username === USER,
                 );
                 return delivered !== undefined;
-            },
-            "the provider must POST the login to the receiver",
-        )
-        .toBe(true);
+        },
+        { message: "the provider must POST the login to the receiver" },
+    )
+    .toBe(true);
 
     expect(delivered!.authorizationPresent, "sync must carry a bearer token").toBe(
         true,
@@ -171,6 +173,15 @@ test("login synchronization delivers the authenticated user to the receiver", as
     expect(delivered!.payload.event_type, "payload must be a LOGIN event").toBe(
         "LOGIN",
     );
+    // ADR-0002: permissionsync requires exactly one permissionsync:<target> scope.
+    expect(
+        delivered!.scope.split(/\s+/),
+        "SA token must carry the permissionsync target scope",
+    ).toContain("permissionsync:plugin-test-client");
+    expect(
+        delivered!.aud,
+        "SA token must carry the permissionsync audience",
+    ).toContain("permissionsync");
 });
 
 test("login synchronization fails closed when the receiver rejects", async ({

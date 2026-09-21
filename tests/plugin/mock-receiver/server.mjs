@@ -43,6 +43,31 @@ function parseJson(raw) {
     }
 }
 
+// Decode without verifying the bearer JWT; only non-secret claims are kept.
+function bearerClaims(req) {
+    const header = String(req.headers.authorization ?? "");
+    if (!header.startsWith("Bearer ")) {
+        return { scope: "", aud: [] };
+    }
+    const parts = header.slice("Bearer ".length).split(".");
+    if (parts.length < 2) {
+        return { scope: "", aud: [] };
+    }
+    try {
+        const payload = JSON.parse(
+            Buffer.from(parts[1], "base64url").toString("utf8"),
+        );
+        const aud = Array.isArray(payload.aud)
+            ? payload.aud.map(String)
+            : payload.aud === undefined || payload.aud === null
+              ? []
+              : [String(payload.aud)];
+        return { scope: String(payload.scope ?? ""), aud };
+    } catch {
+        return { scope: "", aud: [] };
+    }
+}
+
 const server = createServer(async (req, res) => {
     const url = new URL(req.url ?? "/", "http://placeholder");
     const path = url.pathname;
@@ -59,6 +84,7 @@ const server = createServer(async (req, res) => {
             return;
         }
         const username = payload.username;
+        const claims = bearerClaims(req);
         received.push({
             receivedAt: new Date().toISOString(),
             username,
@@ -66,6 +92,9 @@ const server = createServer(async (req, res) => {
             authorizationPresent: String(req.headers.authorization ?? "").startsWith(
                 "Bearer ",
             ),
+            // Non-secret claims, never the token itself.
+            scope: claims.scope,
+            aud: claims.aud,
             payload,
         });
         // Never log payload content: it carries user identities.
