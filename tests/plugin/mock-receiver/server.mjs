@@ -24,8 +24,7 @@ function readBody(req) {
         req.on("data", (chunk) => {
             size += chunk.length;
             if (size > MAX_BODY_BYTES) {
-                reject(new Error("body too large"));
-                req.destroy();
+                reject(new RangeError("body too large"));
                 return;
             }
             chunks.push(chunk);
@@ -41,6 +40,26 @@ function parseJson(raw) {
     } catch {
         return undefined;
     }
+}
+
+async function readJson(req, res) {
+    let raw;
+    try {
+        raw = await readBody(req);
+    } catch (err) {
+        if (res.writable) {
+            reply(res, err instanceof RangeError ? 413 : 400, {
+                status: err instanceof RangeError ? "body too large" : "unreadable body",
+            });
+        }
+        return undefined;
+    }
+    const json = parseJson(raw);
+    if (json === null || typeof json !== "object") {
+        reply(res, 400, { status: "bad json" });
+        return undefined;
+    }
+    return json;
 }
 
 // Decode without verifying the bearer JWT; only non-secret claims are kept.
@@ -78,9 +97,8 @@ const server = createServer(async (req, res) => {
     }
 
     if (req.method === "POST" && path === "/sync") {
-        const payload = parseJson(await readBody(req));
-        if (payload === undefined || payload === null || typeof payload !== "object") {
-            reply(res, 400, { status: "bad json" });
+        const payload = await readJson(req, res);
+        if (payload === undefined) {
             return;
         }
         const username = payload.username;
@@ -118,8 +136,11 @@ const server = createServer(async (req, res) => {
     }
 
     if (req.method === "POST" && path === "/fail-users") {
-        const body = parseJson(await readBody(req));
-        if (typeof body?.username !== "string" || body.username === "") {
+        const body = await readJson(req, res);
+        if (body === undefined) {
+            return;
+        }
+        if (typeof body.username !== "string" || body.username === "") {
             reply(res, 400, { status: "username required" });
             return;
         }
