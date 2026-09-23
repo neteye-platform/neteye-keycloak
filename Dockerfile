@@ -21,7 +21,7 @@ ARG LOGIN_SYNC_VERSION=0.1.0
 # --- Providers: download the release jars ------------------------------------
 # The Keycloak image is UBI-minimal and ships no curl, so fetching happens in a
 # separate stage.
-FROM docker.io/library/alpine:3.24@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b AS providers
+FROM docker.io/library/alpine:3.24@sha256:5b02b42e375f7426f8d65c3af331ca05d9878f9989230354504e0b9dfd431f60 AS providers
 ARG BCRYPT_VERSION
 ARG HOME_IDP_VERSION
 ARG OIDC_MAPPER_VERSION
