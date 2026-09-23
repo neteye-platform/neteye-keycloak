@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   build-image:
-    # The image this repo builds (Keycloak + the NetEye theme + the three
+    # The image this repo builds (Keycloak + the NetEye theme + the four
     # providers) is built ONCE here and shared by the two test jobs below, so a
     # PR never builds it more than once. push: false uploads it as an artifact
     # (neteye-keycloak-image/image.tar) instead of publishing to GHCR.
