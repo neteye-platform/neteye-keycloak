@@ -99,7 +99,7 @@
         "issuer": "http://localhost:8081/auth/realms/upstream",
         "clientId": "upstream-client",
         "clientSecret": "upstream-secret",
-        "defaultScope": "openid",
+        "defaultScope": "openid profile email",
         "syncMode": "IMPORT",
         "useJwksUrl": "true",
         "home.idp.discovery.domains": "neteye.example"
