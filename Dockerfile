@@ -14,7 +14,7 @@ ARG BCRYPT_VERSION=1.7.0
 # renovate: datasource=github-releases depName=sventorben/keycloak-home-idp-discovery extractVersion=^v(?<version>.*)$
 ARG HOME_IDP_VERSION=26.2.2
 # renovate: datasource=github-releases depName=neteye-platform/keycloak-oidc-groups-mapper extractVersion=^v(?<version>.*)$
-ARG OIDC_MAPPER_VERSION=1.3.1
+ARG OIDC_MAPPER_VERSION=1.3.2
 # renovate: datasource=github-releases depName=neteye-platform/keycloak-login-sync-provider extractVersion=^v(?<version>.*)$
 ARG LOGIN_SYNC_VERSION=0.1.0
 
@@ -50,6 +50,17 @@ FROM keycloak AS build
 # ships (see conf/keycloak.conf in the keycloak RPM: db=mariadb).
 ARG KC_DB=mariadb
 ARG KC_HTTP_RELATIVE_PATH=/auth
+
+# The OIDC groups mapper reads its own Keycloak provider ID from this env var
+# in a static initializer (it cannot be a Keycloak SPI option: getId() must be
+# known before Config.Scope is available, see the mapper's own source). Because
+# the final image runs with --optimized, this value is frozen in at build time
+# here, not at container start. It defaults to the pre-rename ID so existing
+# NetEye installs upgrading to a mapper build with the new default ID
+# ("oidc-group-mapper") keep matching the identityProviderMapper value already
+# persisted for configured IdPs.
+ARG OIDC_GROUPS_MAPPER_PROVIDER_ID=neteye-oidc-groups-mapper
+ENV OIDC_GROUPS_MAPPER_PROVIDER_ID=${OIDC_GROUPS_MAPPER_PROVIDER_ID}
 
 COPY --chown=keycloak:keycloak --from=providers /providers/ /opt/keycloak/providers/
 COPY --chown=keycloak:keycloak themes/neteye/ /opt/keycloak/themes/neteye/
