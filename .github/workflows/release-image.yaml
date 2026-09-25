@@ -51,10 +51,11 @@ jobs:
             echo "bcrypt=$(get_arg BCRYPT_VERSION)"
             echo "home-idp=$(get_arg HOME_IDP_VERSION)"
             echo "oidc-mapper=$(get_arg OIDC_MAPPER_VERSION)"
+            echo "login-sync=$(get_arg LOGIN_SYNC_VERSION)"
           } >> "$GITHUB_OUTPUT"
 
       - name: Create or update GitHub release
-        uses: softprops/action-gh-release@3d0d9888cb7fd7b750713d6e236d1fcb99157228 # v3.0.2
+        uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
         with:
           token: ${{ steps.generate-token.outputs.token }}
           name: ${{ github.ref_name }}
@@ -68,3 +69,4 @@ jobs:
             | keycloak-bcrypt | ${{ steps.dependency-versions.outputs.bcrypt }} |
             | keycloak-home-idp-discovery | ${{ steps.dependency-versions.outputs.home-idp }} |
             | keycloak-oidc-group-mapper | ${{ steps.dependency-versions.outputs.oidc-mapper }} |
+            | keycloak-login-sync-provider | ${{ steps.dependency-versions.outputs.login-sync }} |
