@@ -1,7 +1,7 @@
 # Theme test harness.
 #
 # Runs the IMAGE THIS REPOSITORY BUILDS (localhost/neteye-keycloak:test, i.e.
-# Keycloak plus the NetEye theme baked in, plus the three providers) against
+# Keycloak plus the NetEye theme baked in, plus the four providers) against
 # the same MariaDB it ships with, importing the theme test realm from
 # tests/realm-test.json. The theme is exercised the way it ships: baked into
 # the image, not mounted.

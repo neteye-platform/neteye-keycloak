@@ -6,7 +6,7 @@ import {
 } from "@playwright/test";
 
 // Runs against the image this repo builds (tests/plugin/compose.plugin.yaml):
-// Keycloak with the three NetEye providers baked in, served under "/auth".
+// Keycloak with the four NetEye providers baked in, served under "/auth".
 const BASE = process.env.KC_BASE_URL ?? "http://localhost:8081/auth";
 const REALM = process.env.KC_TEST_REALM ?? "plugin-test";
 
