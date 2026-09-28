@@ -150,7 +150,7 @@
         "issuer": "http://localhost:8081/auth/realms/upstream",
         "clientId": "upstream-client",
         "clientSecret": "upstream-secret",
-        "defaultScope": "openid",
+        "defaultScope": "openid profile email",
         "syncMode": "IMPORT",
         "useJwksUrl": "true",
         "home.idp.discovery.domains": "neteye.example"
@@ -170,7 +170,7 @@
     {
       "name": "upstream-groups",
       "identityProviderAlias": "upstream-idp",
-      "identityProviderMapper": "oidc-groups-mapper",
+      "identityProviderMapper": "neteye-oidc-groups-mapper",
       "config": {
         "syncMode": "IMPORT",
         "group_claim": "groups"
