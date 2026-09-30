@@ -8,7 +8,10 @@
 
 ARG KEYCLOAK_VERSION=26.7.4
 
-# Provider versions.
+# Provider versions. The ARG name must end in _VERSION: the shared Renovate
+# config picks these up through customManagers:dockerfileVersions, which keys off
+# that suffix plus the comment above each ARG.
+#
 # renovate: datasource=github-releases depName=leroyguillaume/keycloak-bcrypt extractVersion=^v(?<version>.*)$
 ARG BCRYPT_VERSION=1.7.0
 # renovate: datasource=github-releases depName=sventorben/keycloak-home-idp-discovery extractVersion=^v(?<version>.*)$

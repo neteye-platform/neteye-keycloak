@@ -14,7 +14,7 @@ ghcr.io/neteye-platform/neteye-keycloak
 | Keycloak | 26.7.4 | `quay.io/keycloak/keycloak` |
 | `keycloak-bcrypt` | 1.7.0 | [leroyguillaume/keycloak-bcrypt](https://github.com/leroyguillaume/keycloak-bcrypt) |
 | `keycloak-home-idp-discovery` | 26.2.2 | [sventorben/keycloak-home-idp-discovery](https://github.com/sventorben/keycloak-home-idp-discovery) |
-| `keycloak-oidc-groups-mapper` | 1.3.1 | [neteye-platform/keycloak-oidc-groups-mapper](https://github.com/neteye-platform/keycloak-oidc-groups-mapper) |
+| `keycloak-oidc-groups-mapper` | 1.3.2 | [neteye-platform/keycloak-oidc-groups-mapper](https://github.com/neteye-platform/keycloak-oidc-groups-mapper) |
 | `keycloak-login-sync-provider` | 0.1.0 | [neteye-platform/keycloak-login-sync-provider](https://github.com/neteye-platform/keycloak-login-sync-provider) |
 | NetEye theme | — | `themes/neteye/` in this repository |
 
