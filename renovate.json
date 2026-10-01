@@ -26,18 +26,6 @@
   ],
   "packageRules": [
     {
-      "matchPackageNames": ["*"],
-      "minimumReleaseAge": "7 days"
-    },
-    {
-      "matchUpdateTypes": ["digest"],
-      "minimumReleaseAge": null
-    },
-    {
-      "matchDatasources": ["docker"],
-      "minimumReleaseAgeBehaviour": "timestamp-optional"
-    },
-    {
       "matchFileNames": ["README.md"],
       "pinDigests": false
     }
