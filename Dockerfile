@@ -4,7 +4,8 @@
 #
 # Only build-time options live here. Runtime configuration -- database host and
 # credentials, hostname, certificates, proxy settings -- is supplied by the
-# deployment, never baked into the image.
+# deployment, never baked into the image. The one exception is
+# conf/quarkus.properties, which carries no deployment-specific value.
 
 # renovate: datasource=github-releases depName=keycloak/keycloak
 ARG KEYCLOAK_VERSION=26.8.0
@@ -92,6 +93,10 @@ ARG OIDC_GROUPS_MAPPER_PROVIDER_ID=neteye-oidc-groups-mapper
 ENV OIDC_GROUPS_MAPPER_PROVIDER_ID=${OIDC_GROUPS_MAPPER_PROVIDER_ID}
 
 COPY --from=build /opt/keycloak/ /opt/keycloak/
+
+# Not copied into "build": the property is a runtime one, so it is read on
+# every start and need not be persisted into the optimized build.
+COPY --chown=keycloak:keycloak conf/quarkus.properties /opt/keycloak/conf/quarkus.properties
 
 # The standard OCI labels (source, version, revision, ...) are applied by the
 # shared build-docker-image workflow. These record what the tag cannot: the

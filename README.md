@@ -55,6 +55,14 @@ work and fails at start-up.
 docker build --build-arg KC_DB=postgres -t neteye-keycloak:postgres .
 ```
 
+Every new JDBC connection runs `SET SESSION wsrep_sync_wait=1`, shipped in
+`conf/quarkus.properties`. NetEye runs Keycloak on a MariaDB Galera cluster,
+where without it a node can serve a read that does not yet include a write
+already committed cluster-wide; on a single-node MariaDB the statement is
+accepted and does nothing. Keycloak has no native option for a connection-init
+statement, so it is a raw Quarkus property. It is read on every start and a
+deployment can override it with `QUARKUS_DATASOURCE_JDBC_NEW_CONNECTION_SQL`.
+
 Everything else is runtime configuration and is supplied by the deployment:
 database host and credentials, hostname, certificates, proxy headers. The image
 runs `start --optimized`, so changing a build-time option at runtime fails
