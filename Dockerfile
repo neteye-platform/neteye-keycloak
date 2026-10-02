@@ -7,7 +7,7 @@
 # deployment, never baked into the image.
 
 # renovate: datasource=github-releases depName=keycloak/keycloak
-ARG KEYCLOAK_VERSION=26.7.4
+ARG KEYCLOAK_VERSION=26.8.0
 
 # Provider versions. The ARG name must end in _VERSION: the shared Renovate
 # config picks these up through customManagers:dockerfileVersions, which keys off
@@ -18,9 +18,9 @@ ARG BCRYPT_VERSION=1.7.0
 # renovate: datasource=github-releases depName=sventorben/keycloak-home-idp-discovery extractVersion=^v(?<version>.*)$
 ARG HOME_IDP_VERSION=26.2.2
 # renovate: datasource=github-releases depName=neteye-platform/keycloak-oidc-groups-mapper extractVersion=^v(?<version>.*)$
-ARG OIDC_MAPPER_VERSION=1.3.2
+ARG OIDC_MAPPER_VERSION=1.3.4
 # renovate: datasource=github-releases depName=neteye-platform/keycloak-login-sync-provider extractVersion=^v(?<version>.*)$
-ARG LOGIN_SYNC_VERSION=0.1.0
+ARG LOGIN_SYNC_VERSION=0.1.2
 
 # --- Providers: download the release jars ------------------------------------
 # The Keycloak image is UBI-minimal and ships no curl, so fetching happens in a
@@ -43,7 +43,7 @@ RUN curl -fsSL -O \
     curl -fsSL -O \
     https://github.com/neteye-platform/keycloak-login-sync-provider/releases/download/v${LOGIN_SYNC_VERSION}/keycloak-login-sync-provider-${LOGIN_SYNC_VERSION}.jar
 
-FROM quay.io/keycloak/keycloak:26.7.4@sha256:82a77884f3af238beab1e7afd63b5f530e1b5c0590bd7aa60b40a40463e29b2c AS keycloak
+FROM quay.io/keycloak/keycloak:26.8.0@sha256:b0f60d489d51c5d113390bdf5461d4c06e6051be026c05549f2e1e10ec352bcc AS keycloak
 
 # --- Build -------------------------------------------------------------------
 FROM keycloak AS build
