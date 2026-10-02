@@ -3,8 +3,9 @@
 Two Playwright suites cover this image, both run on every pull request
 (`.github/workflows/tests.yaml`): the **theme** and the **plugins**. Both run
 the image this repository actually builds — `localhost/neteye-keycloak:test`,
-i.e. Keycloak plus the NetEye theme and the four providers, baked with
-`kc.sh build` for MariaDB — against the MariaDB it ships with.
+i.e. Keycloak plus the NetEye theme and the four providers — against the
+MariaDB it ships with, started the same way production starts it: a plain
+`start`, with the build-time options passed in the compose file.
 
 The theme is tested the way it ships: baked into the image, exercised through
 Keycloak's real HTTP flows with Playwright. Email templates are rendered for
@@ -61,8 +62,8 @@ npx playwright test -c playwright.theme.config.ts
 cd .. && docker compose -f tests/compose.test.yaml down -v
 ```
 
-The built image serves under `/auth` (a build-time option of the produced
-image), so the realm's registered redirect URIs, the suite's `KC_BASE_URL` and
+The harness serves under `/auth` (`KC_HTTP_RELATIVE_PATH` in the compose
+file), so the realm's registered redirect URIs, the suite's `KC_BASE_URL` and
 the wait loop all use `http://localhost:8080/auth`. The bootstrap `admin` /
 `admin` account is created automatically.
 

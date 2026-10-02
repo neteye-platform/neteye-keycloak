@@ -41,12 +41,15 @@ services:
       - "host.docker.internal:host-gateway"
     command:
       - start
-      - --optimized
       - --import-realm
     volumes:
       - ./realm-plugins.json:/opt/keycloak/data/import/realm-plugins.json:ro
       - ./realm-upstream.json:/opt/keycloak/data/import/realm-upstream.json:ro
     environment:
+      KC_DB: mariadb
+      KC_HTTP_RELATIVE_PATH: /auth
+      KC_HEALTH_ENABLED: "true"
+      KC_METRICS_ENABLED: "true"
       KC_DB_URL_HOST: mariadb
       KC_DB_URL_DATABASE: keycloak
       KC_DB_USERNAME: keycloak
