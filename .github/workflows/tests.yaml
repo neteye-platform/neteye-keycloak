@@ -99,9 +99,9 @@ jobs:
         working-directory: tests
 
   plugin-tests:
-    # The built image against the MariaDB it ships with: does it boot
-    # --optimized, and do the providers work? Needs a real DB, so it is gated
-    # to its own job.
+    # The built image against the MariaDB it ships with: does it boot the way
+    # production boots it, and do the providers work? Needs a real DB, so it is
+    # gated to its own job.
     name: Run plugin tests
     needs: build-image
     runs-on: ubuntu-latest

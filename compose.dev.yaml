@@ -1,6 +1,6 @@
 # Local development only. The credentials below are throwaway and the settings
-# are illustrative: in production every runtime option is supplied by the
-# deployment, not by this file.
+# are illustrative: in production every option is supplied by the deployment,
+# not by this file.
 #
 #   docker compose -f compose.dev.yaml up --build
 #   -> http://localhost:8080/auth  (admin / admin)
@@ -26,6 +26,10 @@ services:
       mariadb:
         condition: service_healthy
     environment:
+      KC_DB: mariadb
+      KC_HTTP_RELATIVE_PATH: /auth
+      KC_HEALTH_ENABLED: "true"
+      KC_METRICS_ENABLED: "true"
       KC_DB_URL_HOST: mariadb
       KC_DB_URL_DATABASE: keycloak
       KC_DB_USERNAME: keycloak
