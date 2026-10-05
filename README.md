@@ -1,7 +1,7 @@
 # neteye-keycloak
 
 The NetEye Keycloak container image: upstream Keycloak plus the NetEye theme
-and the four providers NetEye ships.
+and the three providers NetEye ships.
 
 ```text
 ghcr.io/neteye-platform/neteye-keycloak
@@ -9,14 +9,13 @@ ghcr.io/neteye-platform/neteye-keycloak
 
 ## What is in the image
 
-| Component                      | Version | Source                                                                                                          |
-| ------------------------------ | ------- | --------------------------------------------------------------------------------------------------------------- |
-| Keycloak                       | 26.8.0  | `quay.io/keycloak/keycloak`                                                                                     |
-| `keycloak-bcrypt`              | 1.7.0   | [leroyguillaume/keycloak-bcrypt](https://github.com/leroyguillaume/keycloak-bcrypt)                             |
-| `keycloak-home-idp-discovery`  | 26.2.2  | [sventorben/keycloak-home-idp-discovery](https://github.com/sventorben/keycloak-home-idp-discovery)             |
-| `keycloak-oidc-groups-mapper`  | 1.3.4   | [neteye-platform/keycloak-oidc-groups-mapper](https://github.com/neteye-platform/keycloak-oidc-groups-mapper)   |
-| `keycloak-login-sync-provider` | 0.1.2   | [neteye-platform/keycloak-login-sync-provider](https://github.com/neteye-platform/keycloak-login-sync-provider) |
-| NetEye theme                   | —       | `themes/neteye/` in this repository                                                                             |
+| Component                     | Version | Source                                                                                                        |
+| ----------------------------- | ------- | ------------------------------------------------------------------------------------------------------------- |
+| Keycloak                      | 26.8.0  | `quay.io/keycloak/keycloak`                                                                                   |
+| `keycloak-bcrypt`             | 1.7.0   | [leroyguillaume/keycloak-bcrypt](https://github.com/leroyguillaume/keycloak-bcrypt)                           |
+| `keycloak-home-idp-discovery` | 26.2.2  | [sventorben/keycloak-home-idp-discovery](https://github.com/sventorben/keycloak-home-idp-discovery)           |
+| `keycloak-oidc-groups-mapper` | 1.3.4   | [neteye-platform/keycloak-oidc-groups-mapper](https://github.com/neteye-platform/keycloak-oidc-groups-mapper) |
+| NetEye theme                  | —       | `themes/neteye/` in this repository                                                                           |
 
 The image tag carries the image's own SemVer, not the Keycloak version, so the
 versions above are also recorded as labels:
@@ -25,7 +24,7 @@ versions above are also recorded as labels:
 docker inspect --format '{{json .Labels}}' ghcr.io/neteye-platform/neteye-keycloak:1.0.0
 ```
 
-All four providers are consumed as release jars. There is no way to add a jar
+All three providers are consumed as release jars. There is no way to add a jar
 to the image other than declaring it in the `Dockerfile`, which keeps the
 contents reproducible and visible to Renovate.
 
@@ -98,9 +97,8 @@ the same MariaDB it ships with and exercised through Keycloak's
 real HTTP flows with Playwright. The theme is tested the way it ships: baked
 into the image, including real email rendering captured by a Mailpit SMTP sink.
 The plugin suite drives a real brokered login through `keycloak-home-idp-discovery`
-and `keycloak-oidc-groups-mapper`, a local login proves passwords are hashed
-with `keycloak-bcrypt`, and `keycloak-login-sync-provider` is exercised through
-its own plugin tests.
+and `keycloak-oidc-groups-mapper`, and a local login proves passwords are
+hashed with `keycloak-bcrypt`.
 
 The image is built once per pull request and shared by both suites
 ([`.github/workflows/tests.yaml`](.github/workflows/tests.yaml)). See
