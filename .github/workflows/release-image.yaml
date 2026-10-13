@@ -14,7 +14,7 @@ jobs:
     permissions:
       contents: read
       packages: write
-    uses: neteye-platform/repo-commons/.github/workflows/build-docker-image.yaml@e8e2d702d7a80fc53886bd28a7ddcbb05906180a # main
+    uses: neteye-platform/repo-commons/.github/workflows/build-docker-image.yaml@f64fc47c34183bfbad53c56824ff17000ba80d8b # main
     secrets: inherit
     with:
       working-directory: .
@@ -33,7 +33,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Generate GitHub App token
-        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
         id: generate-token
         with:
           app-id: ${{ vars.NETEYE_APP_ID }}
