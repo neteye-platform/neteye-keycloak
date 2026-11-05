@@ -15,7 +15,7 @@
 # no deployment-specific value.
 
 # renovate: datasource=github-releases depName=keycloak/keycloak
-ARG KEYCLOAK_VERSION=26.8.1
+ARG KEYCLOAK_VERSION=26.8.2
 
 # Provider versions. The ARG name must end in _VERSION: the shared Renovate
 # config picks these up through customManagers:dockerfileVersions, which keys off
@@ -47,7 +47,7 @@ RUN curl -fsSL -O \
     https://github.com/neteye-platform/keycloak-oidc-groups-mapper/releases/download/v${OIDC_MAPPER_VERSION}/keycloak-oidc-group-mapper-${OIDC_MAPPER_VERSION}.jar
 
 # --- Final -------------------------------------------------------------------
-FROM quay.io/keycloak/keycloak:26.8.1@sha256:79c623a22abacf3fe6c00a5fb30f5b7843d717b234033b80995891c06116d244
+FROM quay.io/keycloak/keycloak:26.8.2@sha256:3879c623248408de29a5303178b5816c77e8dfef3890c361f8c0bbeaa979ba3b
 
 ARG KEYCLOAK_VERSION
 ARG BCRYPT_VERSION
