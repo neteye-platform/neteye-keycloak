@@ -846,3 +846,13 @@ textarea {
 .pf-v5-theme-dark .nt-light-theme {
   display: none;
 }
+
+/* Social login provider icons: Keycloak 26.8 renders them as <img> without intrinsic size */
+#kc-social-providers img,
+#kc-social-providers picture {
+  height: var(--pf-v5-global--FontSize--xl, 1.25rem);
+  width: var(--pf-v5-global--FontSize--xl, 1.25rem);
+  object-fit: contain;
+  flex: 0 0 auto;
+  margin-inline-end: var(--pf-v5-global--spacer--sm, 0.5rem);
+}
