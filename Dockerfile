@@ -34,7 +34,7 @@ ARG LOGIN_SYNC_VERSION=0.1.3
 # --- Providers: download the release jars ------------------------------------
 # The Keycloak image is UBI-minimal and ships no curl, so fetching happens in a
 # separate stage.
-FROM docker.io/library/alpine:3.24@sha256:be2656061b536c1883c4034790e21d0a09c5aaaf51968b89368a3c0371ea2c9a AS providers
+FROM docker.io/library/alpine:3.24@sha256:f59abe656b692d901e184be3445e084786602108599d2a51d229c0f5a48c71bf AS providers
 ARG BCRYPT_VERSION
 ARG HOME_IDP_VERSION
 ARG OIDC_MAPPER_VERSION
@@ -53,7 +53,7 @@ RUN curl -fsSL -O \
     https://github.com/neteye-platform/keycloak-login-sync-provider/releases/download/v${LOGIN_SYNC_VERSION}/keycloak-login-sync-provider-${LOGIN_SYNC_VERSION}.jar
 
 # --- Final -------------------------------------------------------------------
-FROM quay.io/keycloak/keycloak:26.8.2@sha256:3879c623248408de29a5303178b5816c77e8dfef3890c361f8c0bbeaa979ba3b
+FROM quay.io/keycloak/keycloak:26.8.2@sha256:723b1d6e254c0fc96d5cffec860c7e0744d6a3277822b865bb538cf891575e41
 
 ARG KEYCLOAK_VERSION
 ARG BCRYPT_VERSION
