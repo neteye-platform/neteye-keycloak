@@ -117,7 +117,7 @@ textarea {
 }
 @media screen and (min-width: 1921px) {
   .login-pf body {
-    background-image: url("../img/neteye-bg-2736.webp");
+    background-image: url("../img/neteye-bg-2128.webp");
   }
 }
 .login-pf .pf-v5-c-login {
@@ -653,7 +653,7 @@ textarea {
 }
 @media screen and (min-width: 1921px) {
   .login-pf.pf-v5-theme-dark body {
-    background-image: url("../img/neteye-bg-2736.webp");
+    background-image: url("../img/neteye-bg-2128.webp");
   }
 }
 .login-pf.pf-v5-theme-dark .pf-v5-c-login__container {
