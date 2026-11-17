@@ -48,8 +48,8 @@ jobs:
 
       - name: Load built image
         run: |
-          docker load -i ${{ runner.temp }}/image.tar
-          docker tag "$(docker images -q | head -1)" localhost/neteye-keycloak:test
+          IMAGE_ID=$(docker load -q -i ${{ runner.temp }}/image.tar | sed -n "s/^Loaded image ID: //p")
+          docker tag "$IMAGE_ID" localhost/neteye-keycloak:test
 
       - name: Start Keycloak + Mailpit harness
         run: docker compose -f compose.test.yaml up -d
@@ -124,8 +124,8 @@ jobs:
 
       - name: Load built image
         run: |
-          docker load -i ${{ runner.temp }}/image.tar
-          docker tag "$(docker images -q | head -1)" localhost/neteye-keycloak:test
+          IMAGE_ID=$(docker load -q -i ${{ runner.temp }}/image.tar | sed -n "s/^Loaded image ID: //p")
+          docker tag "$IMAGE_ID" localhost/neteye-keycloak:test
 
       - name: Start the plugin harness
         run: docker compose -f compose.plugin.yaml up -d
