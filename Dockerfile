@@ -53,7 +53,7 @@ RUN curl -fsSL -O \
     https://github.com/neteye-platform/keycloak-login-sync-provider/releases/download/v${LOGIN_SYNC_VERSION}/keycloak-login-sync-provider-${LOGIN_SYNC_VERSION}.jar
 
 # --- Final -------------------------------------------------------------------
-FROM quay.io/keycloak/keycloak:26.8.2@sha256:723b1d6e254c0fc96d5cffec860c7e0744d6a3277822b865bb538cf891575e41
+FROM quay.io/keycloak/keycloak:26.8.2@sha256:c68e286cacd87b942ac1939a0a1481461109d6acd3a57dc496969a319a76bbf0
 
 ARG KEYCLOAK_VERSION
 ARG BCRYPT_VERSION
