@@ -25,7 +25,7 @@ services:
       retries: 20
 
   mailpit:
-    image: docker.io/axllent/mailpit:v1.26.0@sha256:dffd15d30117bb67e9f4464f6595fc9a40a6b324f99b43236c4d1675b708752e
+    image: docker.io/axllent/mailpit:v1.34.0@sha256:23a2ef85bc50853ab3093645d1d64679afd8887e89da5e48a88940c172591a4e
     ports:
       - "8025:8025"
 
