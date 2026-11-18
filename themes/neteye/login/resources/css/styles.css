@@ -112,8 +112,8 @@ textarea {
   font-family: "IBM Plex Sans", sans-serif !important;
 }
 .login-pf body {
-  background: url("../img/neteye-bg-1920.webp") no-repeat center center;
-  background-size: cover;
+  background: url("../img/neteye-bg-1920.webp") no-repeat center 48px #161616;
+  background-size: max(100vw, calc((100vh - 48px) * 1.5)) auto;
 }
 @media screen and (min-width: 1921px) {
   .login-pf body {
@@ -647,8 +647,8 @@ textarea {
   padding-bottom: 0px;
 }
 .login-pf.pf-v5-theme-dark body {
-  background: url("../img/neteye-bg-1920.webp") no-repeat center center;
-  background-size: cover;
+  background: url("../img/neteye-bg-1920.webp") no-repeat center 48px #161616;
+  background-size: max(100vw, calc((100vh - 48px) * 1.5)) auto;
   color: #f4f4f4 !important;
 }
 @media screen and (min-width: 1921px) {

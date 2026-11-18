@@ -24,8 +24,8 @@
   font-family: 'IBM Plex Sans', sans-serif !important;
 
   body {
-    background: url('../img/neteye-bg-1920.webp') no-repeat center center;
-    background-size: cover;
+    background: url('../img/neteye-bg-1920.webp') no-repeat center 48px $gray-100;
+    background-size: max(100vw, calc((100vh - 48px) * 1.5)) auto;
 
     @media screen and (min-width: 1921px) {
       background-image: url('../img/neteye-bg-2736.webp');
@@ -652,8 +652,8 @@
   &.pf-v5-theme-dark {
     body {
       background:
-        url('../img/neteye-bg-1920.webp') no-repeat center center;
-      background-size: cover;
+        url('../img/neteye-bg-1920.webp') no-repeat center 48px $gray-100;
+      background-size: max(100vw, calc((100vh - 48px) * 1.5)) auto;
       color: $gray-10 !important;
 
       @media screen and (min-width: 1921px) {
